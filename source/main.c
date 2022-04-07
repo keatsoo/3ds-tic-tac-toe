@@ -2,6 +2,7 @@
 #include <3ds.h>
 #include <citro2d.h>
 #include <stdio.h>
+#include <citro2d.h>
 
 int main(int argc, char** argv)
 {
@@ -65,6 +66,8 @@ int main(int argc, char** argv)
 			aptJumpToHomeMenu();
   		}
 		}
+
+
 		// Flush and swap framebuffers
 		gfxFlushBuffers();
 		gfxSwapBuffers();
