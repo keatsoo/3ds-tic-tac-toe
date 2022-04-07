@@ -12,6 +12,8 @@ int main(int argc, char** argv)
 	//Initialize console on top screen. Using NULL as the second argument tells the console library to use the internal console structure as current one
 	consoleInit(GFX_TOP, NULL);
 
+		C3D_RenderTarget* top = C2D_CreateScreenTarget(GFX_TOP, GFX_LEFT);
+
 	printf("\x1b[16;20HHello noob");
 
 	printf("\x1b[30;16HPress Start to exit.");
@@ -65,6 +67,14 @@ int main(int argc, char** argv)
 			aptJumpToHomeMenu();
   		}
 		}
+
+				// Render the scene
+		C3D_FrameBegin(C3D_FRAME_SYNCDRAW);
+		C2D_TargetClear(top, clrClear);
+		C2D_SceneBegin(top);
+
+		//just testing drawing
+		C2D_DrawRectangle(0, 0, 0, 50, 50, clrRed, clrRed, clrRed, clrRed);
 
 
 		// Flush and swap framebuffers
