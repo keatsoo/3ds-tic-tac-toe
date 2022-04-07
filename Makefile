@@ -31,6 +31,10 @@ include $(DEVKITARM)/3ds_rules
 #     - icon.png
 #     - <libctru folder>/default_icon.png
 #---------------------------------------------------------------------------------
+APP_TITLE		:= 	TicTacToe
+APP_DESCRIPTION	:=	A 3DS tic-tac-toe LAN game.
+APP_AUTHOR		:=	Kitsou and pvpb0t
+
 TARGET		:=	$(notdir $(CURDIR))
 BUILD		:=	build
 SOURCES		:=	source
