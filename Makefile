@@ -31,9 +31,9 @@ include $(DEVKITARM)/3ds_rules
 #     - icon.png
 #     - <libctru folder>/default_icon.png
 #---------------------------------------------------------------------------------
-APP_TITLE		:= 	Artemis
-APP_DESCRIPTION	:=	The homie himself
-APP_AUTHOR		:=	pvpb0t
+APP_TITLE		:= 	TicTacToe
+APP_DESCRIPTION	:=	A 3DS tic-tac-toe LAN game.
+APP_AUTHOR		:=	kitsou and pvpb0t :)
 
 TARGET		:=	$(notdir $(CURDIR))
 BUILD		:=	build
