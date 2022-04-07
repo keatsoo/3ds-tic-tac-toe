@@ -1,2 +1,2 @@
-# 3ds-tic-tac-toe
+# 3DS TicTacToe
 A 3DS tic-tac-toe LAN game.
