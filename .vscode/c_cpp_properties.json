@@ -1,0 +1,23 @@
+{
+    "configurations": [
+        {
+            "name": "3DS",
+            "includePath": [
+                
+                "C:/devkitPRO/devkitARM/arm-none-eabi/include/**",
+                "C:/devkitPRO/devkitARM/lib/gcc/arm-none-eabi/**",
+                "C:/devkitPRO/libctru/include/**",
+                "C:/devkitPRO/portlibs/3ds/include/**"
+            ],
+            "defines": [
+                "_3DS"
+            ],
+            "compilerPath": "C:/devkitPRO/devkitARM/bin/arm-none-eabi-gcc",
+            "cStandard": "c11",
+            "cppStandard": "c++20",
+            "intelliSenseMode": "linux-gcc-arm",
+            "compilerArgs": []
+        }
+    ],
+    "version": 4
+}
