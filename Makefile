@@ -31,19 +31,15 @@ include $(DEVKITARM)/3ds_rules
 #     - icon.png
 #     - <libctru folder>/default_icon.png
 #---------------------------------------------------------------------------------
-APP_TITLE		:= 	TicTacToe
-APP_DESCRIPTION	:=	A 3DS tic-tac-toe LAN game.
-APP_AUTHOR		:=	kitsou and pvpb0t :)
-
 TARGET		:=	$(notdir $(CURDIR))
 BUILD		:=	build
 SOURCES		:=	source
 DATA		:=	data
 INCLUDES	:=	include
 GRAPHICS	:=	gfx
-GFXBUILD	:=	$(BUILD)
-#ROMFS		:=	romfs
-#GFXBUILD	:=	$(ROMFS)/gfx
+#GFXBUILD	:=	$(BUILD)
+ROMFS		:=	romfs
+GFXBUILD	:=	$(ROMFS)/gfx
 
 #---------------------------------------------------------------------------------
 # options for code generation
@@ -61,7 +57,7 @@ CXXFLAGS	:= $(CFLAGS) -fno-rtti -fno-exceptions -std=gnu++11
 ASFLAGS	:=	-g $(ARCH)
 LDFLAGS	=	-specs=3dsx.specs -g $(ARCH) -Wl,-Map,$(notdir $*.map)
 
-LIBS	:= -lctru -lm
+LIBS	:= -lcitro2d -lcitro3d -lctru -lm
 
 #---------------------------------------------------------------------------------
 # list of directories containing libraries, this must be the top level containing
@@ -77,18 +73,14 @@ LIBDIRS	:= $(CTRULIB)
 ifneq ($(BUILD),$(notdir $(CURDIR)))
 #---------------------------------------------------------------------------------
 
-BAD := /home/
-GOOD := C:/Users/
-
+export OUTPUT	:=	$(CURDIR)/$(TARGET)
 export TOPDIR	:=	$(CURDIR)
-NEWTOPDIR := $(subst $(BAD),$(GOOD),$(TOPDIR))
 
-export OUTPUT	:=	$(NEWTOPDIR)/$(TARGET)
-export VPATH	:=	$(foreach dir,$(SOURCES),$(NEWTOPDIR)/$(dir)) \
-			$(foreach dir,$(GRAPHICS),$(NEWTOPDIR)/$(dir)) \
-			$(foreach dir,$(DATA),$(NEWTOPDIR)/$(dir))
+export VPATH	:=	$(foreach dir,$(SOURCES),$(CURDIR)/$(dir)) \
+			$(foreach dir,$(GRAPHICS),$(CURDIR)/$(dir)) \
+			$(foreach dir,$(DATA),$(CURDIR)/$(dir))
 
-export DEPSDIR	:=	$(NEWTOPDIR)/$(BUILD)
+export DEPSDIR	:=	$(CURDIR)/$(BUILD)
 
 CFILES		:=	$(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)/*.c)))
 CPPFILES	:=	$(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)/*.cpp)))
@@ -112,24 +104,13 @@ else
 endif
 #---------------------------------------------------------------------------------
 
-#---------------------------------------------------------------------------------
-ifeq ($(GFXBUILD),$(BUILD))
-#---------------------------------------------------------------------------------
-export T3XFILES :=  $(GFXFILES:.t3s=.t3x)
-#---------------------------------------------------------------------------------
-else
-#---------------------------------------------------------------------------------
-export ROMFS_T3XFILES	:=	$(patsubst %.t3s, $(GFXBUILD)/%.t3x, $(GFXFILES))
-export T3XHFILES		:=	$(patsubst %.t3s, $(BUILD)/%.h, $(GFXFILES))
-#---------------------------------------------------------------------------------
-endif
-#---------------------------------------------------------------------------------
+export T3XFILES		:=	$(GFXFILES:.t3s=.t3x)
 
 export OFILES_SOURCES 	:=	$(CPPFILES:.cpp=.o) $(CFILES:.c=.o) $(SFILES:.s=.o)
 
 export OFILES_BIN	:=	$(addsuffix .o,$(BINFILES)) \
 			$(PICAFILES:.v.pica=.shbin.o) $(SHLISTFILES:.shlist=.shbin.o) \
-			$(addsuffix .o,$(T3XFILES))
+			$(if $(filter $(BUILD),$(GFXBUILD)),$(addsuffix .o,$(T3XFILES)))
 
 export OFILES := $(OFILES_BIN) $(OFILES_SOURCES)
 
@@ -169,32 +150,15 @@ endif
 .PHONY: all clean
 
 #---------------------------------------------------------------------------------
-all: $(BUILD) $(GFXBUILD) $(DEPSDIR) $(ROMFS_T3XFILES) $(T3XHFILES)
+all:
+	@mkdir -p $(BUILD) $(GFXBUILD)
 	@$(MAKE) --no-print-directory -C $(BUILD) -f $(CURDIR)/Makefile
-
-$(BUILD):
-	@mkdir -p $@
-
-ifneq ($(GFXBUILD),$(BUILD))
-$(GFXBUILD):
-	@mkdir -p $@
-endif
-
-ifneq ($(DEPSDIR),$(BUILD))
-$(DEPSDIR):
-	@mkdir -p $@
-endif
 
 #---------------------------------------------------------------------------------
 clean:
 	@echo clean ...
-	@rm -fr $(BUILD) $(TARGET).3dsx $(OUTPUT).smdh $(TARGET).elf $(GFXBUILD)
+	@rm -fr $(BUILD) $(TARGET).3dsx $(OUTPUT).smdh $(TARGET).elf
 
-#---------------------------------------------------------------------------------
-$(GFXBUILD)/%.t3x	$(BUILD)/%.h	:	%.t3s
-#---------------------------------------------------------------------------------
-	@echo $(notdir $<)
-	@tex3ds -i $< -H $(BUILD)/$*.h -d $(DEPSDIR)/$*.d -o $(GFXBUILD)/$*.t3x
 
 #---------------------------------------------------------------------------------
 else
@@ -218,10 +182,8 @@ $(OUTPUT).elf	:	$(OFILES)
 
 #---------------------------------------------------------------------------------
 .PRECIOUS	:	%.t3x
-#---------------------------------------------------------------------------------
 %.t3x.o	%_t3x.h :	%.t3x
 #---------------------------------------------------------------------------------
-	@echo $(notdir $<)
 	@$(bin2o)
 
 #---------------------------------------------------------------------------------
@@ -254,7 +216,7 @@ endef
 %.t3x	%.h	:	%.t3s
 #---------------------------------------------------------------------------------
 	@echo $(notdir $<)
-	@tex3ds -i $< -H $*.h -d $*.d -o $*.t3x
+	@tex3ds -i $< -H $*.h -d $*.d -o $(TOPDIR)/$(GFXBUILD)/$*.t3x
 
 -include $(DEPSDIR)/*.d
 
