@@ -1,7 +1,7 @@
 #include <3ds.h>
 #include <citro2d.h>
 #include <stdlib.h>
-#include <stdio.h>
+#include <iostream>
 #include <assert.h>
 #include <time.h>
 
@@ -32,8 +32,9 @@ int main(int argc, char** argv[])
 
 		if (kDown & KEY_START) break; // break in order to return to hbmenu
 
+		double timePassed = checkTime();
 		consoleClear();
-		printf(checkTime());
+		std::cout << timePassed;
 
 		// Flush and swap framebuffers
 		gfxFlushBuffers();
