@@ -18,7 +18,7 @@ typedef struct {
 
 static C2D_SpriteSheet spriteSheet;
 static Sprite sprites[MAX_SPRITES];
-// static size_t numSprites = MAX_SPRITES/2;
+//static size_t numSprites = MAX_SPRITES/2;
 
 time_t start = time(0);
 double checkTime();
@@ -70,17 +70,16 @@ int main(int argc, char** argv[])
 		IndexEachTick = timePassed % 2;
 
 		consoleClear();
-		//Prints to console the Time in seconds and Switching between index 0 and 1 in the credits array
-		//std::cout << "Time: " << timePassed << "\n"<< "Game by: " << credits[IndexEachTick] << "\n:)";
+		Prints to console the Time in seconds and Switching between index 0 and 1 in the credits array
+		std::cout << "Time: " << timePassed << "\n"<< "Game by: " << credits[IndexEachTick] << "\n:)";
 
 		// Saves in variable gridPos and prints the coordinates of the case where we're clicking
 		int caseX = touch.px / (SCREEN_WIDTH / 3);
 		int caseY = touch.py / (SCREEN_WIDTH / 3);
 		std::cout << "\n\nYou are on the case " << caseX << " ; " << caseY;
 
-		gridCoor [2][1] = 1;
-		gridCoor [0][1] = 2;
-		
+		gridCoor[caseX][caseY] = IndexEachTick + 1;
+
 		// draw frame
 		C3D_FrameBegin(C3D_FRAME_SYNCDRAW);
 		C2D_TargetClear(top, C2D_Color32f(0.0f, 0.5f, 0.0f, 1.0f));
