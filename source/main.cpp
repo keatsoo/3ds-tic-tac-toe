@@ -29,7 +29,7 @@ static int T3_DrawSprite(int type);
 
 static touchPosition touch;
 
-int gridCoor[3][3]; // 3x3 array
+int gridCoor[3][3]; // 3x3 array of ints
 
 int main(int argc, char** argv[])
 {
