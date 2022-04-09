@@ -155,6 +155,8 @@ static void initImages(){
 	
 	// size_t numImages = C2D_SpriteSheetCount(spriteSheet);
 
+	// what
+
 	// Puts the center of the X and the O to the middle of the sprite
 	//using size_t instead of int since it works like int and we dont have cast it to a size_t for the parameter when drawing the sprites
 	for (size_t i = 1; i < MAX_SPRITES; i++)
