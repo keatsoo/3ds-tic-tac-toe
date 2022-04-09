@@ -101,13 +101,18 @@ double checkTime(){
 static void initImages(){
 	// size_t numImages = C2D_SpriteSheetCount(spriteSheet);
 
-	for (size_t i = 0; i < MAX_SPRITES; i++)
+	for (size_t i = 1; i < MAX_SPRITES; i++)
 	{
 		Sprite* sprite = &sprites[i];
 
 		C2D_SpriteFromSheet(&sprite->spr, spriteSheet, i);
 		C2D_SpriteSetCenter(&sprite->spr, 0.5f, 0.5f);
 	}
+
+	Sprite* sprite = &sprites[0];
+
+	C2D_SpriteFromSheet(&sprite->spr, spriteSheet, 0);
+	C2D_SpriteSetCenter(&sprite->spr, 0.0f, 0.0f);
 }
 
 static int T3_DrawSprite(int type){
