@@ -71,7 +71,7 @@ int main(int argc, char** argv[])
 
 		consoleClear();
 		//Prints to console the Time in seconds and Switching between index 0 and 1 in the credits array
-		//std::cout << "Time: " << timePassed << "\n"<< "Game by: " << credits[IndexEachTick] << "\n:)";
+		std::cout << "Time: " << timePassed << "\n"<< "Game by: " << credits[IndexEachTick] << "\n:)";
 
 		// Saves in variable gridPos and prints the coordinates of the case where we're clicking
 		int caseX = touch.px / (SCREEN_WIDTH / 3);
