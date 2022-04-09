@@ -30,7 +30,7 @@ static int T3_DrawSprite(int type);
 
 static touchPosition touch;
 
-int gridCoor[3][3]; // 3x3 array of ints
+int gridCoor[3][3] = {0}; // 3x3 array of ints
 
 int main(int argc, char** argv[])
 {
@@ -41,7 +41,7 @@ int main(int argc, char** argv[])
 	C2D_Prepare();
 	consoleInit(GFX_TOP, NULL);
 
-	    const char *credits[2] = { "Kitsou", "pvpb0t"};
+	const char *credits[2] = { "kitsou", "pvpb0t"};
 
 	// Create screens
 	C3D_RenderTarget* top = C2D_CreateScreenTarget(GFX_BOTTOM, GFX_LEFT);
@@ -73,20 +73,56 @@ int main(int argc, char** argv[])
 		if (spriteNbrIndex == 0) spriteNbrIndex++; // Doesnt let spriteNbrIndex be equal to 0 (0 is the grid)
 
 		consoleClear();
-		std::cout << "Time: " << timePassed << "\n"<< "Game By: " << credits[creditsIndex];
-	
+		std::cout << "Time: " << timePassed << "\n"<< "Game by: " << credits[creditsIndex] << "\n:)";
 
+		gridCoor [2][1] = 1;
+		gridCoor [0][1] = 2;
+	
+		/*
 		// Sets the position of the X/O
 		Sprite* sprite = &sprites[spriteNbrIndex];
 		C2D_SpriteSetPos(&sprite->spr, touch.px, touch.py);
+		*/
 		
 		// draw frame
 		C3D_FrameBegin(C3D_FRAME_SYNCDRAW);
 		C2D_TargetClear(top, C2D_Color32f(0.0f, 0.5f, 0.0f, 1.0f));
 		C2D_SceneBegin(top);
 		//----------- BEGIN DRAWING -------------
-		T3_DrawSprite(0); // Draws the grid 
-		if (touch.px != 0 && touch.py != 0) T3_DrawSprite(spriteNbrIndex); // Draws eiher an X or an O
+		T3_DrawSprite(0); // Draws the grid
+
+		for (int y = 0; y < 3; y++) {
+			for (int x = 0; x < 3; x++) {
+
+				int xPos = ((SCREEN_WIDTH / 3) * x) + 35;
+				int yPos = ((SCREEN_HEIGHT / 3) * y) + 35;
+
+				switch (gridCoor[x][y]) {
+					case 0:
+						break;
+					
+					case 1: {
+						Sprite* sprite = &sprites[1];
+						C2D_SpriteSetPos(&sprite->spr, xPos, yPos);
+						T3_DrawSprite(1);
+						break;
+					}
+
+					case 2: {
+						Sprite* sprite = &sprites[2];
+						C2D_SpriteSetPos(&sprite->spr, xPos, yPos);
+						T3_DrawSprite(2);
+						break;
+					}
+					
+					default:
+						break;
+				}
+			}	
+		}
+		
+
+		/* if (touch.px != 0 && touch.py != 0) T3_DrawSprite(spriteNbrIndex); // Draws eiher an X or an O */
 		//------------ END DRAWING --------------
 		C3D_FrameEnd(0);
 		
