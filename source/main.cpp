@@ -16,6 +16,15 @@ typedef struct {
 	char type[]; 
 } Sprite;
 
+typedef struct {
+	u16 x;
+	u16 y; 
+} GridCase;
+
+static GridCase gridPos;
+
+static GridCase checkGridPos(u16 x, u16 y);
+
 static C2D_SpriteSheet spriteSheet;
 static Sprite sprites[MAX_SPRITES];
 static size_t numSprites = MAX_SPRITES/2;
@@ -71,18 +80,14 @@ int main(int argc, char** argv[])
 
 		consoleClear();
 		//Prints to console the Time in seconds and Switching between index 0 and 1 in the credits array
-		std::cout << "Time: " << timePassed << "\n"<< "Game By: " << credits[IndexEachTick] << "\n:)";
-	
+		std::cout << "Time: " << timePassed << "\n"<< "Game by: " << credits[IndexEachTick] << "\n:)";
+
+		// Saves in variable gridPos and prints the coordinates of the case where we're clicking
+		static GridCase gridPos = checkGridPos(touch.px, touch.py);
+		std::cout << "\n\nYou are on the case " << gridPos.x << " ; " << gridPos.y;
 
 		gridCoor [2][1] = 1;
 		gridCoor [0][1] = 2;
-	
-		/*
-		// Sets the position of the X/O
-		//IndexEachTick + 1 because otherwise it will draw the grid
-		Sprite* sprite = &sprites[IndexEachTick+1];
-		C2D_SpriteSetPos(&sprite->spr, touch.px, touch.py);
-		*/
 		
 		// draw frame
 		C3D_FrameBegin(C3D_FRAME_SYNCDRAW);
@@ -168,4 +173,11 @@ static void initImages(){
 static int T3_DrawSprite(int type){
 	C2D_DrawSprite(&sprites[type].spr);
 	return 0;
+}
+
+static GridCase checkGridPos(u16 x, u16 y) {
+	GridCase gridCase;
+	gridCase.x = x / (SCREEN_WIDTH / 3);
+	gridCase.y = y / (SCREEN_HEIGHT / 3);
+	return gridCase;
 }
