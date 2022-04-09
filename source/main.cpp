@@ -7,7 +7,7 @@
 #include <cmath>
 
 #define MAX_SPRITES 5
-#define SCREEN_WIDTH  400
+#define SCREEN_WIDTH  320
 #define SCREEN_HEIGHT 240
 
 typedef struct {
@@ -21,8 +21,10 @@ static size_t numSprites = MAX_SPRITES/2;
 
 time_t start = time(0);
 double checkTime();
+int sprite2Draw(0);
 
 static void initImages();
+static int T3_DrawSprite(int type);
 
 int main(int argc, char** argv[])
 {
@@ -31,10 +33,10 @@ int main(int argc, char** argv[])
 	C3D_Init(C3D_DEFAULT_CMDBUF_SIZE);
 	C2D_Init(C2D_DEFAULT_MAX_OBJECTS);
 	C2D_Prepare();
-	consoleInit(GFX_BOTTOM, NULL);
+	consoleInit(GFX_TOP, NULL);
 
 	// Create screens
-	C3D_RenderTarget* top = C2D_CreateScreenTarget(GFX_TOP, GFX_LEFT);
+	C3D_RenderTarget* top = C2D_CreateScreenTarget(GFX_BOTTOM, GFX_LEFT);
 
 	// Load graphics
 	spriteSheet = C2D_SpriteSheetLoad("romfs:/gfx/sprites.t3x");
@@ -58,18 +60,16 @@ int main(int argc, char** argv[])
 		consoleClear();
 		std::cout << timePassed;
 
-		// Each 3 seconds, go to the next sprite
-		if ((timePassed % 3) == 0){
-			numSprites++;
-		}
-
+		sprite2Draw = timePassed % 3;
+		
 		C3D_FrameBegin(C3D_FRAME_SYNCDRAW);
 		C2D_TargetClear(top, C2D_Color32f(0.0f, 0.5f, 0.0f, 1.0f));
 		C2D_SceneBegin(top);
-		for (size_t i = 0; i < numSprites; i ++)
-			C2D_DrawSprite(&sprites[i].spr);
+		//----------- BEGIN DRAWING -------------
+		T3_DrawSprite(sprite2Draw);
+		//------------ END DRAWING --------------
 		C3D_FrameEnd(0);
-
+		
 		//Wait for VBlank
 		gspWaitForVBlank();
 	}
@@ -91,16 +91,26 @@ double checkTime(){
 
 static void initImages(){
 	size_t numImages = C2D_SpriteSheetCount(spriteSheet);
-	srand(time(NULL));
 
 	for (size_t i = 0; i < MAX_SPRITES; i++)
 	{
 		Sprite* sprite = &sprites[i];
 
-		// Random image, position, rotation and speed
-		C2D_SpriteFromSheet(&sprite->spr, spriteSheet, rand() % numImages);
-		C2D_SpriteSetCenter(&sprite->spr, 0.5f, 0.5f);
-		C2D_SpriteSetPos(&sprite->spr, rand() % SCREEN_WIDTH, rand() % SCREEN_HEIGHT);
+		C2D_SpriteFromSheet(&sprite->spr, spriteSheet, i);
+		C2D_SpriteSetCenter(&sprite->spr, 0.0f, 0.0f);
+		C2D_SpriteSetPos(&sprite->spr, SCREEN_WIDTH % 2, SCREEN_HEIGHT % 2);
 	}
+}
 
+static int T3_DrawSprite(int type){
+	if (type == 0) {
+		C2D_DrawSprite(&sprites[0].spr);
+	} else if (type == 1) {
+		C2D_DrawSprite(&sprites[1].spr);
+	} else if (type == 2) {
+		C2D_DrawSprite(&sprites[2].spr);
+	} else {
+		std::cout << "u askd 4 nun \n";
+	}
+	return 0;
 }
