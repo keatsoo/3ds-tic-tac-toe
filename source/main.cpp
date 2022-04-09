@@ -75,15 +75,10 @@ int main(int argc, char** argv[])
 
 		// Checks time, clears the console then outputs the time that has passed
 		int timePassed = round(checkTime());
-<<<<<<< HEAD
 		// spriteNbrIndex = timePassed % 2;
 		creditsIndex = timePassed % 2;
 
 		// if (spriteNbrIndex == 0) spriteNbrIndex++; // Doesnt let spriteNbrIndex be equal to 0 (0 is the grid)
-=======
-		creditsIndex = timePassed % 2;
-
->>>>>>> 199b86c83a5d6ccc5516004b45c29cf3e61fd22c
 
 		consoleClear();
 		std::cout << "Time: " << timePassed << "\n"<< "Game by: " << credits[creditsIndex] << "\n:)";
