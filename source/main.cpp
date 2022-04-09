@@ -16,22 +16,13 @@ typedef struct {
 	char type[]; 
 } Sprite;
 
-typedef struct {
-	touchPosition x;
-	touchPosition y;
-} GridCoor;
-
-static GridCoor checkCase(touchPosition x, touchPosition y);
-
 static C2D_SpriteSheet spriteSheet;
 static Sprite sprites[MAX_SPRITES];
 static size_t numSprites = MAX_SPRITES/2;
 
 time_t start = time(0);
 double checkTime();
-int creditsIndex(0);
-
-static GridCoor gridPos;
+int IndexEachTick(0);
 
 static void initImages();
 static int T3_DrawSprite(int type);
@@ -75,17 +66,21 @@ int main(int argc, char** argv[])
 
 		// Checks time, clears the console then outputs the time that has passed
 		int timePassed = round(checkTime());
-		// spriteNbrIndex = timePassed % 2;
-		creditsIndex = timePassed % 2;
-
-		// if (spriteNbrIndex == 0) spriteNbrIndex++; // Doesnt let spriteNbrIndex be equal to 0 (0 is the grid)
+		//Either is 0 or 1, switches between each second
+		IndexEachTick = timePassed % 2;
 
 		consoleClear();
-		std::cout << "Time: " << timePassed << "\n"<< "Game by: " << credits[creditsIndex] << "\n:)";
+		//Prints to console the Time in seconds and Switching between index 0 and 1 in the credits array
+		std::cout << "Time: " << timePassed << "\n"<< "Game By: " << credits[IndexEachTick] << "\n:)";
+	
+
+		gridCoor [2][1] = 1;
+		gridCoor [0][1] = 2;
 	
 		/*
 		// Sets the position of the X/O
-		Sprite* sprite = &sprites[spriteNbrIndex];
+		//IndexEachTick + 1 because otherwise it will draw the grid
+		Sprite* sprite = &sprites[IndexEachTick+1];
 		C2D_SpriteSetPos(&sprite->spr, touch.px, touch.py);
 		*/
 		
@@ -94,7 +89,7 @@ int main(int argc, char** argv[])
 		C2D_TargetClear(top, C2D_Color32f(0.0f, 0.5f, 0.0f, 1.0f));
 		C2D_SceneBegin(top);
 		//----------- BEGIN DRAWING -------------
-				if (touch.px != 0 && touch.py != 0) T3_DrawSprite(IndexEachTick+1); // Draws eiher an X or an O
+		if (touch.px != 0 && touch.py != 0) T3_DrawSprite(IndexEachTick+1); // Draws eiher an X or an O
 		T3_DrawSprite(0); // Draws the grid
 
 		for (int y = 0; y < 3; y++) {
@@ -155,8 +150,6 @@ static void initImages(){
 	
 	// size_t numImages = C2D_SpriteSheetCount(spriteSheet);
 
-	// what
-
 	// Puts the center of the X and the O to the middle of the sprite
 	//using size_t instead of int since it works like int and we dont have cast it to a size_t for the parameter when drawing the sprites
 	for (size_t i = 1; i < MAX_SPRITES; i++)
@@ -177,10 +170,4 @@ static void initImages(){
 static int T3_DrawSprite(int type){
 	C2D_DrawSprite(&sprites[type].spr);
 	return 0;
-}
-
-static GridCoor checkCase(touchPosition x, touchPosition y) {
-	gridPos.x = x / (SCREEN_WIDTH / 3);
-	gridPos.y = y / (SCREEN_HEIGHT / 3);
-	return gridPos;
 }
