@@ -29,7 +29,6 @@ static size_t numSprites = MAX_SPRITES/2;
 
 time_t start = time(0);
 double checkTime();
-int spriteNbrIndex(0);
 int creditsIndex(0);
 
 static GridCoor gridPos;
