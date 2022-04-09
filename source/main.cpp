@@ -61,12 +61,15 @@ int main(int argc, char** argv[])
 		std::cout << timePassed;
 
 		sprite2Draw = timePassed % 3;
+
+		if (sprite2Draw == 0) sprite2Draw++; //Doesnt let sprite2Draw be equal to 0 (0 is the grid)
 		
 		C3D_FrameBegin(C3D_FRAME_SYNCDRAW);
 		C2D_TargetClear(top, C2D_Color32f(0.0f, 0.5f, 0.0f, 1.0f));
 		C2D_SceneBegin(top);
 		//----------- BEGIN DRAWING -------------
-		T3_DrawSprite(sprite2Draw);
+		T3_DrawSprite(0); // Draws the grid 
+		T3_DrawSprite(sprite2Draw); // Draws eiher an X or an O
 		//------------ END DRAWING --------------
 		C3D_FrameEnd(0);
 		
