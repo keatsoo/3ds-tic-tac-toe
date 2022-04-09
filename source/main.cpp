@@ -77,6 +77,7 @@ int main(int argc, char** argv[])
 		int caseX = touch.px / (SCREEN_WIDTH / 3);
 		int caseY = touch.py / (SCREEN_WIDTH / 3);
 		std::cout << "\n\nYou are on the case " << caseX << " ; " << caseY;
+		std::cout << "\nTouch coordinates are : " << touch.px << " ; " << touch.py;
 
 		gridCoor[caseX][caseY] = IndexEachTick + 1;
 
