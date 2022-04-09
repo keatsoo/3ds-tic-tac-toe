@@ -75,7 +75,7 @@ int main(int argc, char** argv[])
 		C2D_SceneBegin(top);
 		//----------- BEGIN DRAWING -------------
 		T3_DrawSprite(0); // Draws the grid 
-		T3_DrawSprite(spriteNbrIndex); // Draws eiher an X or an O
+		if (touch.px != 0 && touch.py != 0) T3_DrawSprite(spriteNbrIndex); // Draws eiher an X or an O
 		//------------ END DRAWING --------------
 		C3D_FrameEnd(0);
 		
