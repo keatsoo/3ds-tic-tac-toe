@@ -71,7 +71,7 @@ int main(int argc, char** argv[])
 
 		consoleClear();
 		//Prints to console the Time in seconds and Switching between index 0 and 1 in the credits array
-		std::cout << "Time: " << timePassed << "\n"<< "Game by: " << credits[IndexEachTick] << "\n:)";
+		//std::cout << "Time: " << timePassed << "\n"<< "Game by: " << credits[IndexEachTick] << "\n:)";
 
 		// Saves in variable gridPos and prints the coordinates of the case where we're clicking
 		int caseX = touch.px / (SCREEN_WIDTH / 3);
@@ -118,7 +118,6 @@ int main(int argc, char** argv[])
 			}	
 		}
 		
-		if (touch.px != 0 && touch.py != 0) T3_DrawSprite(IndexEachTick+1); // Draws eiher an X or an O
 		/* if (touch.px != 0 && touch.py != 0) T3_DrawSprite(spriteNbrIndex); // Draws eiher an X or an O */
 		//------------ END DRAWING --------------
 		C3D_FrameEnd(0);
@@ -153,6 +152,7 @@ static void initImages(){
 		//Local sprite = number i in the sprite array
 		Sprite* sprite = &sprites[i];
 
+		
 		C2D_SpriteFromSheet(&sprite->spr, spriteSheet, i);
 		C2D_SpriteSetCenter(&sprite->spr, 0.5f, 0.5f);
 	}
