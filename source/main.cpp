@@ -21,10 +21,12 @@ static size_t numSprites = MAX_SPRITES/2;
 
 time_t start = time(0);
 double checkTime();
-int sprite2Draw(0);
+int spriteNbrIndex(0);
 
 static void initImages();
 static int T3_DrawSprite(int type);
+
+static touchPosition touch;
 
 int main(int argc, char** argv[])
 {
@@ -49,6 +51,7 @@ int main(int argc, char** argv[])
 	while (aptMainLoop())
 	{
 		hidScanInput();
+		hidTouchRead(&touch);
 
 		//hidKeysDown returns information about which buttons have been just pressed (and they weren't in the previous frame)
 		u32 kDown = hidKeysDown();
@@ -60,16 +63,19 @@ int main(int argc, char** argv[])
 		consoleClear();
 		std::cout << timePassed;
 
-		sprite2Draw = timePassed % 3;
+		spriteNbrIndex = timePassed % 3;
 
-		if (sprite2Draw == 0) sprite2Draw++; //Doesnt let sprite2Draw be equal to 0 (0 is the grid)
+		if (spriteNbrIndex == 0) spriteNbrIndex++; //Doesnt let spriteNbrIndex be equal to 0 (0 is the grid)
+
+		Sprite* sprite = &sprites[spriteNbrIndex];
+		C2D_SpriteSetPos(&sprite->spr, touch.px, touch.py);
 		
 		C3D_FrameBegin(C3D_FRAME_SYNCDRAW);
 		C2D_TargetClear(top, C2D_Color32f(0.0f, 0.5f, 0.0f, 1.0f));
 		C2D_SceneBegin(top);
 		//----------- BEGIN DRAWING -------------
 		T3_DrawSprite(0); // Draws the grid 
-		T3_DrawSprite(sprite2Draw); // Draws eiher an X or an O
+		T3_DrawSprite(spriteNbrIndex); // Draws eiher an X or an O
 		//------------ END DRAWING --------------
 		C3D_FrameEnd(0);
 		
@@ -93,7 +99,7 @@ double checkTime(){
 }
 
 static void initImages(){
-	size_t numImages = C2D_SpriteSheetCount(spriteSheet);
+	// size_t numImages = C2D_SpriteSheetCount(spriteSheet);
 
 	for (size_t i = 0; i < MAX_SPRITES; i++)
 	{
@@ -101,19 +107,10 @@ static void initImages(){
 
 		C2D_SpriteFromSheet(&sprite->spr, spriteSheet, i);
 		C2D_SpriteSetCenter(&sprite->spr, 0.0f, 0.0f);
-		C2D_SpriteSetPos(&sprite->spr, SCREEN_WIDTH % 2, SCREEN_HEIGHT % 2);
 	}
 }
 
 static int T3_DrawSprite(int type){
-	if (type == 0) {
-		C2D_DrawSprite(&sprites[0].spr);
-	} else if (type == 1) {
-		C2D_DrawSprite(&sprites[1].spr);
-	} else if (type == 2) {
-		C2D_DrawSprite(&sprites[2].spr);
-	} else {
-		std::cout << "u askd 4 nun \n";
-	}
+	C2D_DrawSprite(&sprites[type].spr);
 	return 0;
 }
