@@ -80,11 +80,11 @@ int main(int argc, char** argv[])
 
 		consoleClear();
 		//Prints to console the Time in seconds and Switching between index 0 and 1 in the credits array
-		std::cout << "Time: " << timePassed << "\n"<< "Game by: " << credits[IndexEachTick] << "\n:)";
+		//std::cout << "Time: " << timePassed << "\n"<< "Game by: " << credits[IndexEachTick] << "\n:)";
 
 		// Saves in variable gridPos and prints the coordinates of the case where we're clicking
 		static GridCase gridPos = checkGridPos(touch.px, touch.py);
-		std::cout << "\n\nYou are on the case " << gridPos.x << " ; " << gridPos.y;
+		//std::cout << "\n\nYou are on the case " << gridPos.x << " ; " << gridPos.y;
 
 		gridCoor [2][1] = 1;
 		gridCoor [0][1] = 2;
@@ -160,6 +160,7 @@ static void initImages(){
 		//Local sprite = number i in the sprite array
 		Sprite* sprite = &sprites[i];
 
+		
 		C2D_SpriteFromSheet(&sprite->spr, spriteSheet, i);
 		C2D_SpriteSetCenter(&sprite->spr, 0.5f, 0.5f);
 	}
