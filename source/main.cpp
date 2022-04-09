@@ -62,14 +62,15 @@ int main(int argc, char** argv[])
 		int timePassed = round(checkTime());
 		consoleClear();
 		std::cout << timePassed;
-
+		
 		spriteNbrIndex = timePassed % 3;
+		if (spriteNbrIndex == 0) spriteNbrIndex++; // Doesnt let spriteNbrIndex be equal to 0 (0 is the grid)
 
-		if (spriteNbrIndex == 0) spriteNbrIndex++; //Doesnt let spriteNbrIndex be equal to 0 (0 is the grid)
-
+		// Sets the position of the X/O
 		Sprite* sprite = &sprites[spriteNbrIndex];
 		C2D_SpriteSetPos(&sprite->spr, touch.px, touch.py);
 		
+		// draw frame
 		C3D_FrameBegin(C3D_FRAME_SYNCDRAW);
 		C2D_TargetClear(top, C2D_Color32f(0.0f, 0.5f, 0.0f, 1.0f));
 		C2D_SceneBegin(top);
@@ -101,6 +102,7 @@ double checkTime(){
 static void initImages(){
 	// size_t numImages = C2D_SpriteSheetCount(spriteSheet);
 
+	// Puts the center of the X and the O to the middle of the sprite
 	for (size_t i = 1; i < MAX_SPRITES; i++)
 	{
 		Sprite* sprite = &sprites[i];
@@ -109,8 +111,8 @@ static void initImages(){
 		C2D_SpriteSetCenter(&sprite->spr, 0.5f, 0.5f);
 	}
 
+	// Puts the center of the grid to the top left corner so it takes the whole bottom screen.
 	Sprite* sprite = &sprites[0];
-
 	C2D_SpriteFromSheet(&sprite->spr, spriteSheet, 0);
 	C2D_SpriteSetCenter(&sprite->spr, 0.0f, 0.0f);
 }
