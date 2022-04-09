@@ -102,6 +102,7 @@ double checkTime(){
 }
 
 static void initImages(){
+	
 	// size_t numImages = C2D_SpriteSheetCount(spriteSheet);
 
 	// Puts the center of the X and the O to the middle of the sprite
