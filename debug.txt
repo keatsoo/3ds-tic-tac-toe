@@ -1,0 +1,20 @@
+For debugging crash on the 3ds
+
+//OFFLINE 
+since oreo639 helped me, i will just summerize for noobs like me:
+start msys2
+do cd to the folder of your .elf of the homebrew application (on pc)
+write $DEVKITARM/bin/arm-none-eabi-gdb and then your-apps-name.elf
+now go into homebrew menu or where you launch it from
+open rosalina menu by L+down+select
+go to debugger options->Enable Debugger and Force-debug next application on launch
+make note of the port, and check the ip in the right top corner
+Go out of rosalina menu
+Start your app
+Go to your pc and in msys2/terminal do target remote ip:port
+it should say something like 0x00100000 in _start ()
+then write c and hit enter
+write backtrace or bt
+
+//LINK
+https://gist.github.com/LiquidFenrir/d110f3e7755ffbe82672eda49ae21af2?permalink_comment_id=4127254#gistcomment-4127254
