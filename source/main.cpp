@@ -106,7 +106,7 @@ static void initImages(){
 		Sprite* sprite = &sprites[i];
 
 		C2D_SpriteFromSheet(&sprite->spr, spriteSheet, i);
-		C2D_SpriteSetCenter(&sprite->spr, 0.0f, 0.0f);
+		C2D_SpriteSetCenter(&sprite->spr, 0.5f, 0.5f);
 	}
 }
 
