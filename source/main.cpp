@@ -94,7 +94,6 @@ int main(int argc, char** argv[])
 		C2D_TargetClear(top, C2D_Color32f(0.0f, 0.5f, 0.0f, 1.0f));
 		C2D_SceneBegin(top);
 		//----------- BEGIN DRAWING -------------
-		if (touch.px != 0 && touch.py != 0) T3_DrawSprite(IndexEachTick+1); // Draws eiher an X or an O
 		T3_DrawSprite(0); // Draws the grid
 
 		for (int y = 0; y < 3; y++) {
@@ -127,7 +126,7 @@ int main(int argc, char** argv[])
 			}	
 		}
 		
-
+		if (touch.px != 0 && touch.py != 0) T3_DrawSprite(IndexEachTick+1); // Draws eiher an X or an O
 		/* if (touch.px != 0 && touch.py != 0) T3_DrawSprite(spriteNbrIndex); // Draws eiher an X or an O */
 		//------------ END DRAWING --------------
 		C3D_FrameEnd(0);
