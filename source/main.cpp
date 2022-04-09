@@ -16,6 +16,13 @@ typedef struct {
 	char type[]; 
 } Sprite;
 
+typedef struct {
+	touchPosition x;
+	touchPosition y;
+} GridCoor;
+
+static GridCoor checkCase(touchPosition x, touchPosition y);
+
 static C2D_SpriteSheet spriteSheet;
 static Sprite sprites[MAX_SPRITES];
 static size_t numSprites = MAX_SPRITES/2;
@@ -24,6 +31,8 @@ time_t start = time(0);
 double checkTime();
 int spriteNbrIndex(0);
 int creditsIndex(0);
+
+static GridCoor gridPos;
 
 static void initImages();
 static int T3_DrawSprite(int type);
@@ -67,16 +76,13 @@ int main(int argc, char** argv[])
 
 		// Checks time, clears the console then outputs the time that has passed
 		int timePassed = round(checkTime());
-		spriteNbrIndex = timePassed % 3;
+		spriteNbrIndex = timePassed % 2;
 		creditsIndex = timePassed % 2;
 
 		if (spriteNbrIndex == 0) spriteNbrIndex++; // Doesnt let spriteNbrIndex be equal to 0 (0 is the grid)
 
 		consoleClear();
 		std::cout << "Time: " << timePassed << "\n"<< "Game by: " << credits[creditsIndex] << "\n:)";
-
-		gridCoor [2][1] = 1;
-		gridCoor [0][1] = 2;
 	
 		/*
 		// Sets the position of the X/O
@@ -169,4 +175,10 @@ static void initImages(){
 static int T3_DrawSprite(int type){
 	C2D_DrawSprite(&sprites[type].spr);
 	return 0;
+}
+
+static GridCoor checkCase(touchPosition x, touchPosition y) {
+	gridPos.x = x / (SCREEN_WIDTH / 3);
+	gridPos.y = y / (SCREEN_HEIGHT / 3);
+	return gridPos;
 }
