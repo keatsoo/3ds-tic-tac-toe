@@ -23,6 +23,7 @@ static size_t numSprites = MAX_SPRITES/2;
 time_t start = time(0);
 double checkTime();
 int spriteNbrIndex(0);
+int creditsIndex(0);
 
 static void initImages();
 static int T3_DrawSprite(int type);
@@ -66,14 +67,13 @@ int main(int argc, char** argv[])
 
 		// Checks time, clears the console then outputs the time that has passed
 		int timePassed = round(checkTime());
-
-		
 		spriteNbrIndex = timePassed % 3;
+		creditsIndex = timePassed % 2;
 
 		if (spriteNbrIndex == 0) spriteNbrIndex++; // Doesnt let spriteNbrIndex be equal to 0 (0 is the grid)
 
 		consoleClear();
-		std::cout << "Time: " << timePassed << "\n"<< "Game By: " << credits[spriteNbrIndex-1];
+		std::cout << "Time: " << timePassed << "\n"<< "Game By: " << credits[creditsIndex];
 	
 
 		// Sets the position of the X/O
