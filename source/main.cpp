@@ -70,7 +70,7 @@ int main(int argc, char** argv[])
 		IndexEachTick = timePassed % 2;
 
 		consoleClear();
-		Prints to console the Time in seconds and Switching between index 0 and 1 in the credits array
+		//Prints to console the Time in seconds and Switching between index 0 and 1 in the credits array
 		std::cout << "Time: " << timePassed << "\n"<< "Game by: " << credits[IndexEachTick] << "\n:)";
 
 		// Saves in variable gridPos and prints the coordinates of the case where we're clicking
