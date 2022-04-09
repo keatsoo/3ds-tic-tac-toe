@@ -75,10 +75,8 @@ int main(int argc, char** argv[])
 
 		// Checks time, clears the console then outputs the time that has passed
 		int timePassed = round(checkTime());
-		spriteNbrIndex = timePassed % 2;
 		creditsIndex = timePassed % 2;
 
-		if (spriteNbrIndex == 0) spriteNbrIndex++; // Doesnt let spriteNbrIndex be equal to 0 (0 is the grid)
 
 		consoleClear();
 		std::cout << "Time: " << timePassed << "\n"<< "Game by: " << credits[creditsIndex] << "\n:)";
@@ -94,6 +92,7 @@ int main(int argc, char** argv[])
 		C2D_TargetClear(top, C2D_Color32f(0.0f, 0.5f, 0.0f, 1.0f));
 		C2D_SceneBegin(top);
 		//----------- BEGIN DRAWING -------------
+				if (touch.px != 0 && touch.py != 0) T3_DrawSprite(IndexEachTick+1); // Draws eiher an X or an O
 		T3_DrawSprite(0); // Draws the grid
 
 		for (int y = 0; y < 3; y++) {
