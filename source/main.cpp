@@ -40,6 +40,8 @@ int main(int argc, char** argv[])
 	C2D_Prepare();
 	consoleInit(GFX_TOP, NULL);
 
+	    const char *credits[2] = { "Kitsou", "pvpb0t"};
+
 	// Create screens
 	C3D_RenderTarget* top = C2D_CreateScreenTarget(GFX_BOTTOM, GFX_LEFT);
 
@@ -64,11 +66,15 @@ int main(int argc, char** argv[])
 
 		// Checks time, clears the console then outputs the time that has passed
 		int timePassed = round(checkTime());
-		consoleClear();
-		std::cout << timePassed;
+
 		
 		spriteNbrIndex = timePassed % 3;
+
 		if (spriteNbrIndex == 0) spriteNbrIndex++; // Doesnt let spriteNbrIndex be equal to 0 (0 is the grid)
+
+		consoleClear();
+		std::cout << "Time: " << timePassed << "\n"<< "Game By: " << credits[spriteNbrIndex-1];
+	
 
 		// Sets the position of the X/O
 		Sprite* sprite = &sprites[spriteNbrIndex];
