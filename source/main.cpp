@@ -92,20 +92,8 @@ int main(int argc, char** argv[])
 				}
 			}
 		}
-
-		
-		if(kDown & KEY_UP){
-			arrowPosY--;
-		} else if (kDown & KEY_DOWN){
-			arrowPosY++;
-		} else if(kDown & KEY_RIGHT){
-			arrowPosX++;
-		} else if (kDown & KEY_LEFT){
-			arrowPosX--;
-		}
 		
 
-		
 
 		// Checks time, clears the console then outputs the time that has passed
 		int timePassed = round(checkTime());
@@ -139,10 +127,30 @@ int main(int argc, char** argv[])
 			}
 		}
 
+		if(kDown & KEY_UP){
+			if (arrowPosY != 0){arrowPosY--;}
+		} else if (kDown & KEY_DOWN){
+			if (arrowPosY != 2){arrowPosY++;}
+		} else if(kDown & KEY_RIGHT){
+			if (arrowPosX != 2){arrowPosX++;}
+		} else if (kDown & KEY_LEFT){
+			if (arrowPosX != 0){arrowPosX--;}
+		}
+
+		if(kDown & KEY_A){
+			if (gridCoor[arrowPosX][arrowPosY] == 0){
+				gridCoor[arrowPosX][arrowPosY] = turn;
+				gameRound++;}
+			} else {
+				std::cout << "\nThis case is occupied.";
+			}
+
 		/*// Flush and swap the framebuffers
 		gfxFlushBuffers();
 		gfxSwapBuffers();*/
-		
+	
+
+
 
 		// draw frame
 		C3D_FrameBegin(C3D_FRAME_SYNCDRAW);
@@ -197,6 +205,9 @@ int main(int argc, char** argv[])
 		/* if (touch.px != 0 && touch.py != 0) T3_DrawSprite(spriteNbrIndex); // Draws eiher an X or an O */
 		//------------ END DRAWING --------------
 		C3D_FrameEnd(0);
+
+
+
 
 		// Setting old touch position for the next frame
 		OldPosX = touch.px;
