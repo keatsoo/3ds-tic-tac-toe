@@ -34,6 +34,8 @@ int gridCoor[3][3] = {0}; // 3x3 array of ints
 int gameRound = 0; // What round are we in
 int turn; // Whose turn it is, the only values are 1 (X) and 2 (O)
 
+bool checkRange(int value, int lowest, int highest);
+
 int main(int argc, char** argv[])
 {
 	romfsInit();
@@ -72,7 +74,7 @@ int main(int argc, char** argv[])
 		if (kDown & KEY_START) break; // break in order to return to hbmenu
 
 		// Checks if there is a new touch position, if yes, then round++
-		if ((OldPosX != touch.px && touch.px > 0) || (OldPosY != touch.py && touch.py > 0)) gameRound++;
+		if ((!checkRange(touch.px, OldPosX - 5, OldPosX + 5) && touch.px != 0) || (!checkRange(touch.py, OldPosY - 5, OldPosY + 5) && touch.py != 0)) gameRound++;
 		// Changes turn
 		turn = (gameRound % 2) + 1;
 
@@ -183,4 +185,8 @@ static void initImages(){
 static int T3_DrawSprite(int type){
 	C2D_DrawSprite(&sprites[type].spr);
 	return 0;
+}
+
+bool checkRange(int value, int lowest, int highest) {
+	return (value <= highest && value >= lowest);
 }
