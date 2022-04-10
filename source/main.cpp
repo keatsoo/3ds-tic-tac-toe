@@ -74,10 +74,13 @@ int main(int argc, char** argv[])
 
 		if (kDown & KEY_START) break; // break in order to return to hbmenu
 
-		if(kDown & KEY_SELECT){
+		//If clicks select (resets game)
+		if(kDown & KEY_SELECT){//Loops through all the squares
 			for (int y = 0; y < 3; y++) {
 			for (int x = 0; x < 3; x++) {
+				//If they aint empty
 				if(gridCoor[x][y] != 0){
+					//Resets them
 					gridCoor[x][y] = 0;
 					gameRound = 0;
 				}
