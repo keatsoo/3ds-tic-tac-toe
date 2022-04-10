@@ -126,13 +126,10 @@ int main(int argc, char** argv[])
 		// draw frame
 		C3D_FrameBegin(C3D_FRAME_SYNCDRAW);
 		C2D_TargetClear(top, C2D_Color32f(0.0f, 0.5f, 0.0f, 1.0f));
-		C2D_SceneBegin(top);
+		C2D_SceneBegin(top); 
 		//----------- BEGIN DRAWING -------------
 		T3_DrawSprite(0); // Draws the grid
-		Sprite* sprite = &sprites[3];
-		C2D_SpriteSetPos(&sprite->spr, (SCREEN_WIDTH / 3), (SCREEN_WIDTH / 3));
-		T3_DrawSprite(3);
-
+		
 		//Every frame:
 		//Loops through all the squares in the 3x3 grid
 		for (int y = 0; y < 3; y++) {
@@ -197,6 +194,16 @@ int main(int argc, char** argv[])
 
 double checkTime(){
 	return difftime(time(0), start); 
+}
+
+static int T3_DRAWARROW(int x, int y){
+
+		Sprite* sprite = &sprites[3];
+		C2D_SpriteSetPos(&sprite->spr, ((SCREEN_WIDTH / 3) * x) + 35, ((SCREEN_WIDTH / 3) * y) + 35);
+		T3_DrawSprite(3);
+
+
+	return 0;
 }
 
 static void initImages(){
