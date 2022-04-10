@@ -93,10 +93,17 @@ int main(int argc, char** argv[])
 			}
 		}
 
-		/*
+		
 		if(kDown & KEY_UP){
 			arrowPosY--;
-		} */
+		} else if (kDown & KEY_DOWN){
+			arrowPosY++;
+		} else if(kDown & KEY_RIGHT){
+			arrowPosX++;
+		} else if (kDown & KEY_LEFT){
+			arrowPosX--;
+		}
+		
 
 		
 
@@ -131,6 +138,10 @@ int main(int argc, char** argv[])
 				std::cout << "\nThis case is occupied.";
 			}
 		}
+
+		/*// Flush and swap the framebuffers
+		gfxFlushBuffers();
+		gfxSwapBuffers();*/
 		
 
 		// draw frame
@@ -190,10 +201,6 @@ int main(int argc, char** argv[])
 		// Setting old touch position for the next frame
 		OldPosX = touch.px;
 		OldPosY = touch.py;
-
-		// Flush and swap the framebuffers
-		gfxFlushBuffers();
-		gfxSwapBuffers();
 		
 		//Wait for VBlank
 		gspWaitForVBlank();
