@@ -168,6 +168,9 @@ int main(int argc, char** argv[])
 		gfxFlushBuffers();
 		gfxSwapBuffers();*/
 	
+			if(hasWon()){
+			std::cout << "\nYOU WON";
+		}
 
 
 
@@ -220,6 +223,8 @@ int main(int argc, char** argv[])
 
 		//Draws the arrow on grid 1,1
 		T3_DRAWARROW(arrowPosX,arrowPosY);
+
+
 		
 		/* if (touch.px != 0 && touch.py != 0) T3_DrawSprite(spriteNbrIndex); // Draws eiher an X or an O */
 		//------------ END DRAWING --------------
@@ -298,12 +303,30 @@ bool checkRange(int value, int lowest, int highest) {
 }
 
 bool hasWon(){
-	if (gridCoor[0][0] = 1 && gridCoor[0][1] = 1 && gridCoor[0][2] = 1){return true;}
-	if (gridCoor[1][0] = 1 && gridCoor[1][1] = 1 && gridCoor[1][2] = 1){return true;}
-	if (gridCoor[2][0] = 1 && gridCoor[2][1] = 1 && gridCoor[2][2] = 1){return true;}
+	//X 
+	//Horizontal
+	if (1 == gridCoor[0][0] && 1 == gridCoor[0][1] && 1 == gridCoor[0][2]){return true;}
+	if (gridCoor[1][0] == 1 && gridCoor[1][1] == 1 && gridCoor[1][2] == 1){return true;}
+	if (gridCoor[2][0] == 1 && gridCoor[2][1] == 1 && gridCoor[2][2] == 1){return true;}
+	//Vertical
+	if (gridCoor[0][0] == 1 && gridCoor[1][0] == 1 && gridCoor[2][0] == 1){return true;}
+	if (gridCoor[0][1] == 1 && gridCoor[1][1] == 1 && gridCoor[2][1] == 1){return true;}
+	if (gridCoor[0][2] == 1 && gridCoor[1][2] == 1 && gridCoor[2][2] == 1){return true;}
+	//Diagonal
+	if (gridCoor[0][0] == 1 && gridCoor[1][1] == 1 && gridCoor[2][2] == 1){return true;}
+	if (gridCoor[2][0] == 1 && gridCoor[1][1] == 1 && gridCoor[0][2] == 1){return true;}
 
-	if (gridCoor[0][0] = 1 && gridCoor[1][0] = 1 && gridCoor[2][0] = 1){return true;}
-	if (gridCoor[0][1] = 1 && gridCoor[1][1] = 1 && gridCoor[2][1] = 1){return true;}
-	if (gridCoor[0][2] = 1 && gridCoor[1][2] = 1 && gridCoor[2][2] = 1){return true;}
+	//Y
+	//Horizontal
+	if (1 == gridCoor[0][0] && 2 == gridCoor[0][1] && 2 == gridCoor[0][2]){return true;}
+	if (gridCoor[1][0] == 2 && gridCoor[1][1] == 2 && gridCoor[1][2] == 2){return true;}
+	if (gridCoor[2][0] == 2 && gridCoor[2][1] == 2 && gridCoor[2][2] == 2){return true;}
+	//Vertical
+	if (gridCoor[0][0] == 2 && gridCoor[1][0] == 2 && gridCoor[2][0] == 2){return true;}
+	if (gridCoor[0][1] == 2 && gridCoor[1][1] == 2 && gridCoor[2][1] == 2){return true;}
+	if (gridCoor[0][2] == 2 && gridCoor[1][2] == 2 && gridCoor[2][2] == 2){return true;}
+	//Diagonal
+	if (gridCoor[0][0] == 2 && gridCoor[1][1] == 2 && gridCoor[2][2] == 2){return true;}
+	if (gridCoor[2][0] == 2 && gridCoor[1][1] == 2 && gridCoor[0][2] == 2){return true;}
 	return false;
 }
