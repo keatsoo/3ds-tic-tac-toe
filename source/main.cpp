@@ -39,6 +39,9 @@ int turn; // Whose turn it is, the only values are 1 (X) and 2 (O)
 
 bool checkRange(int value, int lowest, int highest);
 
+int arrowPosX;
+int arrowPosY;
+
 int main(int argc, char** argv[])
 {
 	romfsInit();
@@ -79,16 +82,21 @@ int main(int argc, char** argv[])
 		//If clicks select (resets game)
 		if(kDown & KEY_SELECT){//Loops through all the squares
 			for (int y = 0; y < 3; y++) {
-			for (int x = 0; x < 3; x++) {
-				//If they aint empty
-				if(gridCoor[x][y] != 0){
-					//Resets them
-					gridCoor[x][y] = 0;
-					gameRound = 0;
+				for (int x = 0; x < 3; x++) {
+					//If they aint empty
+					if(gridCoor[x][y] != 0){
+						//Resets them
+						gridCoor[x][y] = 0;
+						gameRound = 0;
+					}
 				}
 			}
-			}
 		}
+
+		/*
+		if(kDown & KEY_UP){
+			arrowPosY--;
+		} */
 
 		
 
@@ -115,13 +123,13 @@ int main(int argc, char** argv[])
 
 		//If touch position is not 0 and the square the touched point is inside is empty (gridcoord[][] = 0)
 		if (touch.px != 0 && touch.py != 0){
-		if(gridCoor[caseX][caseY] == 0) {
-			//Either is 1 or 2 depending on the turn
-			gridCoor[caseX][caseY] = turn;
-			//If the square is already clicked, write text to console
-		} else if (gridCoor[caseX][caseY] != 0) {
-			std::cout << "\nThis case is occupied.";
-		}
+			if(gridCoor[caseX][caseY] == 0) {
+				//Either is 1 or 2 depending on the turn
+				gridCoor[caseX][caseY] = turn;
+				//If the square is already clicked, write text to console
+			} else if (gridCoor[caseX][caseY] != 0) {
+				std::cout << "\nThis case is occupied.";
+			}
 		}
 		
 
@@ -173,7 +181,7 @@ int main(int argc, char** argv[])
 		}
 
 		//Draws the arrow on grid 1,1
-		T3_DRAWARROW(0,0);
+		T3_DRAWARROW(arrowPosX,arrowPosY);
 		
 		/* if (touch.px != 0 && touch.py != 0) T3_DrawSprite(spriteNbrIndex); // Draws eiher an X or an O */
 		//------------ END DRAWING --------------
@@ -182,6 +190,10 @@ int main(int argc, char** argv[])
 		// Setting old touch position for the next frame
 		OldPosX = touch.px;
 		OldPosY = touch.py;
+
+		// Flush and swap the framebuffers
+		gfxFlushBuffers();
+		gfxSwapBuffers();
 		
 		//Wait for VBlank
 		gspWaitForVBlank();
