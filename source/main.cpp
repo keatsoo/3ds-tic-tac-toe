@@ -94,7 +94,12 @@ int main(int argc, char** argv[])
 		std::cout << "\nTouch coordinates are : " << touch.px << " ; " << touch.py;
 		std::cout << "\nYou are on round " << gameRound << " and it is turn " << turn << ".";
 
-		if (touch.px != 0 && touch.py != 0) {gridCoor[caseX][caseY] = turn;}
+		if (touch.px != 0 && touch.py != 0 && gridCoor[caseX][caseY] == 0) {
+			gridCoor[caseX][caseY] = turn;
+		} else if (gridCoor[caseX][caseY] != 0) {
+			std::cout << "This case is occupied.";
+		}
+		
 
 		// draw frame
 		C3D_FrameBegin(C3D_FRAME_SYNCDRAW);
