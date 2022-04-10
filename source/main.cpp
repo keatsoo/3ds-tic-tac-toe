@@ -27,6 +27,8 @@ int IndexEachTick(0);
 
 static void initImages();
 static int T3_DrawSprite(int type);
+static int T3_DRAWARROW(int x, int y);
+
 
 static touchPosition touch;
 
@@ -129,6 +131,7 @@ int main(int argc, char** argv[])
 		C2D_SceneBegin(top); 
 		//----------- BEGIN DRAWING -------------
 		T3_DrawSprite(0); // Draws the grid
+
 		
 		//Every frame:
 		//Loops through all the squares in the 3x3 grid
@@ -168,6 +171,9 @@ int main(int argc, char** argv[])
 				}
 			}	
 		}
+
+		//Draws the arrow on grid 1,1
+		T3_DRAWARROW(0,0);
 		
 		/* if (touch.px != 0 && touch.py != 0) T3_DrawSprite(spriteNbrIndex); // Draws eiher an X or an O */
 		//------------ END DRAWING --------------
