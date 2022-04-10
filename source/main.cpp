@@ -73,10 +73,7 @@ int main(int argc, char** argv[])
 
 		if (kDown & KEY_START) break; // break in order to return to hbmenu
 
-		// Checks if there is a new touch position, if yes, then round++
-		if ((!checkRange(touch.px, OldPosX - 5, OldPosX + 5) && touch.px != 0) || (!checkRange(touch.py, OldPosY - 5, OldPosY + 5) && touch.py != 0)) gameRound++;
-		// Changes turn
-		turn = (gameRound % 2) + 1;
+		
 
 		// Checks time, clears the console then outputs the time that has passed
 		int timePassed = round(checkTime());
@@ -94,10 +91,15 @@ int main(int argc, char** argv[])
 		std::cout << "\nTouch coordinates are : " << touch.px << " ; " << touch.py;
 		std::cout << "\nYou are on round " << gameRound << " and it is turn " << turn << ".";
 
+		// Checks if there is a new touch position, if yes, then round++
+		if (((!checkRange(touch.px, OldPosX - 5, OldPosX + 5) && touch.px != 0) && gridCoor[caseX][caseY] == 0) || ((!checkRange(touch.py, OldPosY - 5, OldPosY + 5) && touch.py != 0) && gridCoor[caseX][caseY] == 0)) gameRound++;
+		// Changes turn
+		turn = (gameRound % 2) + 1;
+
 		if (touch.px != 0 && touch.py != 0 && gridCoor[caseX][caseY] == 0) {
 			gridCoor[caseX][caseY] = turn;
 		} else if (gridCoor[caseX][caseY] != 0) {
-			std::cout << "This case is occupied.";
+			std::cout << "\nThis case is occupied.";
 		}
 		
 
