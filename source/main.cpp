@@ -44,6 +44,7 @@ int turn; // Whose turn it is, the only values are 1 (X) and 2 (O)
 
 
 bool checkRange(int value, int lowest, int highest);
+bool hasWon();
 
 int arrowPosX;
 int arrowPosY;
@@ -294,4 +295,15 @@ static int T3_DrawSprite(int type){
 
 bool checkRange(int value, int lowest, int highest) {
 	return (value <= highest && value >= lowest);
+}
+
+bool hasWon(){
+	if (gridCoor[0][0] = 1 && gridCoor[0][1] = 1 && gridCoor[0][2] = 1){return true;}
+	if (gridCoor[1][0] = 1 && gridCoor[1][1] = 1 && gridCoor[1][2] = 1){return true;}
+	if (gridCoor[2][0] = 1 && gridCoor[2][1] = 1 && gridCoor[2][2] = 1){return true;}
+
+	if (gridCoor[0][0] = 1 && gridCoor[1][0] = 1 && gridCoor[2][0] = 1){return true;}
+	if (gridCoor[0][1] = 1 && gridCoor[1][1] = 1 && gridCoor[2][1] = 1){return true;}
+	if (gridCoor[0][2] = 1 && gridCoor[1][2] = 1 && gridCoor[2][2] = 1){return true;}
+	return false;
 }
