@@ -8,23 +8,27 @@
 
 //Needs to be the right ammount of sprite, otherwise crash on the 3ds :(
 #define MAX_SPRITES 4
+//Sets the width and height of the screen
 #define SCREEN_WIDTH  320
 #define SCREEN_HEIGHT 240
 
-
+//Sprite class basicly
 typedef struct {
 	C2D_Sprite spr;
 	char type[]; 
 } Sprite;
 
+//Local instance of Sprite and C2D_SpriteSheet
 static C2D_SpriteSheet spriteSheet;
 static Sprite sprites[MAX_SPRITES];
 //static size_t numSprites = MAX_SPRITES/2;
 
+//Timer
 time_t start = time(0);
 double checkTime();
 int IndexEachTick(0);
 
+//Has to initialize the functions
 static void initImages();
 static int T3_DrawSprite(int type);
 static int T3_DRAWARROW(int x, int y);
@@ -32,25 +36,35 @@ static int T3_DRAWARROW(int x, int y);
 
 static touchPosition touch;
 
+//Starts from 0->2 (not 1->3 like i thought)
 int gridCoor[3][3] = {0}; // 3x3 array of ints
 
 int gameRound = 0; // What round are we in
 int turn; // Whose turn it is, the only values are 1 (X) and 2 (O)
+
 
 bool checkRange(int value, int lowest, int highest);
 
 int arrowPosX;
 int arrowPosY;
 
+//Main method
 int main(int argc, char** argv[])
 {
+	//Wrapper for \ref romfsMountSelf with the default "romfs" device name.
 	romfsInit();
+	//Initializes the LCD framebuffers with default parameters This is equivalent to calling: gfxInit(GSP_BGR8_OES,GSP_BGR8_OES,false);
 	gfxInitDefault();
+	//Initializes citro3D lib
 	C3D_Init(C3D_DEFAULT_CMDBUF_SIZE);
+	//Initialize citro2d and sets max objects
 	C2D_Init(C2D_DEFAULT_MAX_OBJECTS);
+	//Prepares the GPU for rendering 2D content
 	C2D_Prepare();
+	//Initialise the console, what screen should be used (our case its the top one) and a pointer to the default console (null)
 	consoleInit(GFX_TOP, NULL);
 
+	//Array of our names, const since it wont change
 	const char *credits[2] = { "kitsou", "pvpb0t"};
 
 	// Create screens
@@ -100,6 +114,7 @@ int main(int argc, char** argv[])
 		//Either is 0 or 1, switches between each second
 		IndexEachTick = timePassed % 2;
 
+		//Clears the screen by using iprintf("
 		consoleClear();
 		//Prints to console the Time in seconds and Switching between index 0 and 1 in the credits array
 		std::cout << "Time: " << timePassed << "\n"<< "Game by: " << credits[IndexEachTick] << " >:)";
@@ -127,6 +142,7 @@ int main(int argc, char** argv[])
 			}
 		}
 
+		//If button presses, changes the coords for the arrow.
 		if(kDown & KEY_UP){
 			if (arrowPosY != 0){arrowPosY--;}
 		} else if (kDown & KEY_DOWN){
@@ -137,7 +153,9 @@ int main(int argc, char** argv[])
 			if (arrowPosX != 0){arrowPosX--;}
 		}
 
+		//If button A is pressed
 		if(kDown & KEY_A){
+			//If the arrow is on an empty square -> it will select it and mark it with the respective x/o for the turn being
 			if (gridCoor[arrowPosX][arrowPosY] == 0){
 				gridCoor[arrowPosX][arrowPosY] = turn;
 				gameRound++;}
@@ -228,17 +246,22 @@ int main(int argc, char** argv[])
 	return 0;
 }
 
+//Checks the time from 0 to now
 double checkTime(){
 	return difftime(time(0), start); 
 }
 
+//Function to draw the arrow
 static int T3_DRAWARROW(int x, int y){
 
+		//Sprite pointer called sprite that points towards the memory adress of index 3 of the array sprites
 		Sprite* sprite = &sprites[3];
+		//Move sprite (absolute), derefrensing the sprite and using the ptr in the Sprite struct as the pointer to the sprite, sets x and y pos
 		C2D_SpriteSetPos(&sprite->spr, ((SCREEN_WIDTH / 3) * x) + 10, ((SCREEN_WIDTH / 3.7) * y) + 35);
+		//draws sprite
 		T3_DrawSprite(3);
 
-
+	//Ends function
 	return 0;
 }
 
