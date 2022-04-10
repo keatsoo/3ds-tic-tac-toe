@@ -103,7 +103,7 @@ int main(int argc, char** argv[])
 		consoleClear();
 		//Prints to console the Time in seconds and Switching between index 0 and 1 in the credits array
 		std::cout << "Time: " << timePassed << "\n"<< "Game by: " << credits[IndexEachTick] << " >:)";
-		std::cout << "\nNavigate with touchpad or dpad " << "\nPress Select to reset";
+		std::cout << "\nNavigate with the TouchPad, or move the \narrow with theDPad and A to confirm" << "\nPress Select to reset";
 
 		// Saves in variable gridPos and prints the coordinates of the case where we're clicking
 		int caseX = touch.px / (SCREEN_WIDTH / 3);
