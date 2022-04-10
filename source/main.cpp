@@ -74,6 +74,17 @@ int main(int argc, char** argv[])
 
 		if (kDown & KEY_START) break; // break in order to return to hbmenu
 
+		if(kDown & KEY_SELECT){
+			for (int y = 0; y < 3; y++) {
+			for (int x = 0; x < 3; x++) {
+				if(gridCoor[x][y] != 0){
+					gridCoor[x][y] = 0;
+					gameRound = 0;
+				}
+			}
+			}
+		}
+
 		
 
 		// Checks time, clears the console then outputs the time that has passed
@@ -83,7 +94,8 @@ int main(int argc, char** argv[])
 
 		consoleClear();
 		//Prints to console the Time in seconds and Switching between index 0 and 1 in the credits array
-		std::cout << "Time: " << timePassed << "\n"<< "Game by: " << credits[IndexEachTick] << ">:) \n:)";
+		std::cout << "Time: " << timePassed << "\n"<< "Game by: " << credits[IndexEachTick] << " >:)";
+		std::cout << "\nNavigate with touchpad or dpad " << "\nPress Select to reset";
 
 		// Saves in variable gridPos and prints the coordinates of the case where we're clicking
 		int caseX = touch.px / (SCREEN_WIDTH / 3);
@@ -98,12 +110,14 @@ int main(int argc, char** argv[])
 		turn = (gameRound % 2) + 1;
 
 		//If touch position is not 0 and the square the touched point is inside is empty (gridcoord[][] = 0)
-		if (touch.px != 0 && touch.py != 0 && gridCoor[caseX][caseY] == 0) {
+		if (touch.px != 0 && touch.py != 0){
+		if(gridCoor[caseX][caseY] == 0) {
 			//Either is 1 or 2 depending on the turn
 			gridCoor[caseX][caseY] = turn;
 			//If the square is already clicked, write text to console
 		} else if (gridCoor[caseX][caseY] != 0) {
 			std::cout << "\nThis case is occupied.";
+		}
 		}
 		
 
