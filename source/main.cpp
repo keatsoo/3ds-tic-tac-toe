@@ -224,7 +224,7 @@ double checkTime(){
 static int T3_DRAWARROW(int x, int y){
 
 		Sprite* sprite = &sprites[3];
-		C2D_SpriteSetPos(&sprite->spr, ((SCREEN_WIDTH / 3) * x) + 35, ((SCREEN_WIDTH / 3) * y) + 35);
+		C2D_SpriteSetPos(&sprite->spr, ((SCREEN_WIDTH / 3) * x) + 35, ((SCREEN_WIDTH / 3.7) * y) + 35);
 		T3_DrawSprite(3);
 
 
