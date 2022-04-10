@@ -7,7 +7,7 @@
 #include <cmath>
 
 //Needs to be the right ammount of sprite, otherwise crash on the 3ds :(
-#define MAX_SPRITES 3
+#define MAX_SPRITES 4
 #define SCREEN_WIDTH  320
 #define SCREEN_HEIGHT 240
 
@@ -106,7 +106,6 @@ int main(int argc, char** argv[])
 		std::cout << "\n\nYou are on the case " << caseX << " ; " << caseY;
 		std::cout << "\nTouch coordinates are : " << touch.px << " ; " << touch.py;
 		std::cout << "\nYou are on round " << gameRound << " and it is turn " << turn << ".";
-
 		// Checks if there is a new touch position, if yes, then round++
 		if (((!checkRange(touch.px, OldPosX - 5, OldPosX + 5) && touch.px != 0) && gridCoor[caseX][caseY] == 0) || ((!checkRange(touch.py, OldPosY - 5, OldPosY + 5) && touch.py != 0) && gridCoor[caseX][caseY] == 0)) gameRound++;
 		// Changes turn (alternates between 1 and 2)
@@ -130,6 +129,9 @@ int main(int argc, char** argv[])
 		C2D_SceneBegin(top);
 		//----------- BEGIN DRAWING -------------
 		T3_DrawSprite(0); // Draws the grid
+		Sprite* sprite = &sprites[3];
+		C2D_SpriteSetPos(&sprite->spr, (SCREEN_WIDTH / 3), (SCREEN_WIDTH / 3));
+		T3_DrawSprite(3);
 
 		//Every frame:
 		//Loops through all the squares in the 3x3 grid
