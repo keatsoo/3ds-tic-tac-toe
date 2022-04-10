@@ -18,6 +18,11 @@ typedef struct {
 	char type[]; 
 } Sprite;
 
+typedef struct {
+	int id;
+	std::string name;
+} State;
+
 //Local instance of Sprite and C2D_SpriteSheet
 static C2D_SpriteSheet spriteSheet;
 static Sprite sprites[MAX_SPRITES];
@@ -32,7 +37,6 @@ int IndexEachTick(0);
 static void initImages();
 static int T3_DrawSprite(int type);
 static int T3_DRAWARROW(int x, int y);
-
 
 static touchPosition touch;
 
