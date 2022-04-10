@@ -31,6 +31,9 @@ static touchPosition touch;
 
 int gridCoor[3][3] = {0}; // 3x3 array of ints
 
+int gameRound = 0; // What round are we in
+int turn; // Whose turn it is, the only values are 1 (X) and 2 (O)
+
 int main(int argc, char** argv[])
 {
 	romfsInit();
@@ -52,6 +55,10 @@ int main(int argc, char** argv[])
 	// Initialize sprites
 	initImages();
 
+	// Setting old touch position
+	u16 OldPosX = 0;
+	u16 OldPosY = 0;
+
 	// Main loop
 	while (aptMainLoop())
 	{
@@ -63,6 +70,11 @@ int main(int argc, char** argv[])
 		u32 kDown = hidKeysDown();
 
 		if (kDown & KEY_START) break; // break in order to return to hbmenu
+
+		// Checks if there is a new touch position, if yes, then round++
+		if ((OldPosX != touch.px && touch.px > 0) || (OldPosY != touch.py && touch.py > 0)) gameRound++;
+		// Changes turn
+		turn = (gameRound % 2) + 1;
 
 		// Checks time, clears the console then outputs the time that has passed
 		int timePassed = round(checkTime());
@@ -78,8 +90,9 @@ int main(int argc, char** argv[])
 		int caseY = touch.py / (SCREEN_WIDTH / 3.7);
 		std::cout << "\n\nYou are on the case " << caseX << " ; " << caseY;
 		std::cout << "\nTouch coordinates are : " << touch.px << " ; " << touch.py;
+		std::cout << "\nYou are on round " << gameRound << " and it is turn " << turn << ".";
 
-		if (touch.px != 0 && touch.py != 0) {gridCoor[caseX][caseY] = IndexEachTick + 1;}
+		if (touch.px != 0 && touch.py != 0) {gridCoor[caseX][caseY] = turn;}
 
 		// draw frame
 		C3D_FrameBegin(C3D_FRAME_SYNCDRAW);
@@ -121,6 +134,10 @@ int main(int argc, char** argv[])
 		/* if (touch.px != 0 && touch.py != 0) T3_DrawSprite(spriteNbrIndex); // Draws eiher an X or an O */
 		//------------ END DRAWING --------------
 		C3D_FrameEnd(0);
+
+		// Setting old touch position for the next frame
+		OldPosX = touch.px;
+		OldPosY = touch.py;
 		
 		//Wait for VBlank
 		gspWaitForVBlank();
