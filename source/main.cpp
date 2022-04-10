@@ -75,11 +75,11 @@ int main(int argc, char** argv[])
 
 		// Saves in variable gridPos and prints the coordinates of the case where we're clicking
 		int caseX = touch.px / (SCREEN_WIDTH / 3);
-		int caseY = touch.py / (SCREEN_WIDTH / 3);
+		int caseY = touch.py / (SCREEN_WIDTH / 3.7);
 		std::cout << "\n\nYou are on the case " << caseX << " ; " << caseY;
 		std::cout << "\nTouch coordinates are : " << touch.px << " ; " << touch.py;
 
-		gridCoor[caseX][caseY] = IndexEachTick + 1;
+		if (touch.px != 0 && touch.py != 0) {gridCoor[caseX][caseY] = IndexEachTick + 1;}
 
 		// draw frame
 		C3D_FrameBegin(C3D_FRAME_SYNCDRAW);
