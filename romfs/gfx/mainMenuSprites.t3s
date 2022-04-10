@@ -1,0 +1,4 @@
+--atlas -f rgba8888 -z auto
+mainScreen.png
+startButton.png
+onlineButton.png
