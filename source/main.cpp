@@ -6,6 +6,7 @@
 #include <time.h>
 #include <cmath>
 
+//Needs to be the right ammount of sprite, otherwise crash on the 3ds :(
 #define MAX_SPRITES 3
 #define SCREEN_WIDTH  320
 #define SCREEN_HEIGHT 240
@@ -82,7 +83,7 @@ int main(int argc, char** argv[])
 
 		consoleClear();
 		//Prints to console the Time in seconds and Switching between index 0 and 1 in the credits array
-		std::cout << "Time: " << timePassed << "\n"<< "Game by: " << credits[IndexEachTick] << "\n:)";
+		std::cout << "Time: " << timePassed << "\n"<< "Game by: " << credits[IndexEachTick] << ">:) \n:)";
 
 		// Saves in variable gridPos and prints the coordinates of the case where we're clicking
 		int caseX = touch.px / (SCREEN_WIDTH / 3);
@@ -93,11 +94,14 @@ int main(int argc, char** argv[])
 
 		// Checks if there is a new touch position, if yes, then round++
 		if (((!checkRange(touch.px, OldPosX - 5, OldPosX + 5) && touch.px != 0) && gridCoor[caseX][caseY] == 0) || ((!checkRange(touch.py, OldPosY - 5, OldPosY + 5) && touch.py != 0) && gridCoor[caseX][caseY] == 0)) gameRound++;
-		// Changes turn
+		// Changes turn (alternates between 1 and 2)
 		turn = (gameRound % 2) + 1;
 
+		//If touch position is not 0 and the square the touched point is inside is empty (gridcoord[][] = 0)
 		if (touch.px != 0 && touch.py != 0 && gridCoor[caseX][caseY] == 0) {
+			//Either is 1 or 2 depending on the turn
 			gridCoor[caseX][caseY] = turn;
+			//If the square is already clicked, write text to console
 		} else if (gridCoor[caseX][caseY] != 0) {
 			std::cout << "\nThis case is occupied.";
 		}
@@ -110,30 +114,39 @@ int main(int argc, char** argv[])
 		//----------- BEGIN DRAWING -------------
 		T3_DrawSprite(0); // Draws the grid
 
+		//Every frame:
+		//Loops through all the squares in the 3x3 grid
 		for (int y = 0; y < 3; y++) {
 			for (int x = 0; x < 3; x++) {
 
+				//Sets the x and y position
 				int xPos = ((SCREEN_WIDTH / 3) * x) + 35;
 				int yPos = ((SCREEN_HEIGHT / 3) * y) + 35;
 
+				//Initializes a swich statement
 				switch (gridCoor[x][y]) {
+					//If is empty
 					case 0:
 						break;
-					
+					//If is a cross
 					case 1: {
+						//Draws the cross
 						Sprite* sprite = &sprites[1];
 						C2D_SpriteSetPos(&sprite->spr, xPos, yPos);
 						T3_DrawSprite(1);
 						break;
 					}
 
+					//If is a circle
 					case 2: {
+						//Draws the cricle
 						Sprite* sprite = &sprites[2];
 						C2D_SpriteSetPos(&sprite->spr, xPos, yPos);
 						T3_DrawSprite(2);
 						break;
 					}
 					
+					//Else
 					default:
 						break;
 				}
