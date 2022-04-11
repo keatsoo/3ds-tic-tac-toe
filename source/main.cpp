@@ -48,6 +48,7 @@ int turn; // Whose turn it is, the only values are 1 (X) and 2 (O)
 
 
 bool checkRange(int value, int lowest, int highest);
+bool hasWon();
 
 int arrowPosX;
 int arrowPosY;
@@ -403,7 +404,77 @@ int main(int argc, char**)
 		
 		}
 	
+			if(hasWon()){
+			std::cout << "\nYOU WON";
+		}
+
+
+
+		// draw frame
+		C3D_FrameBegin(C3D_FRAME_SYNCDRAW);
+		C2D_TargetClear(top, C2D_Color32f(0.0f, 0.5f, 0.0f, 1.0f));
+		C2D_SceneBegin(top); 
+		//----------- BEGIN DRAWING -------------
+		T3_DrawSprite(0); // Draws the grid
+
 		
+		//Every frame:
+		//Loops through all the squares in the 3x3 grid
+		for (int y = 0; y < 3; y++) {
+			for (int x = 0; x < 3; x++) {
+
+				//Sets the x and y position
+				int xPos = ((SCREEN_WIDTH / 3) * x) + 35;
+				int yPos = ((SCREEN_HEIGHT / 3) * y) + 35;
+
+				//Initializes a swich statement
+				switch (gridCoor[x][y]) {
+					//If is empty
+					case 0:
+						break;
+					//If is a cross
+					case 1: {
+						//Draws the cross
+						Sprite* sprite = &sprites[1];
+						C2D_SpriteSetPos(&sprite->spr, xPos, yPos);
+						T3_DrawSprite(1);
+						break;
+					}
+
+					//If is a circle
+					case 2: {
+						//Draws the cricle
+						Sprite* sprite = &sprites[2];
+						C2D_SpriteSetPos(&sprite->spr, xPos, yPos);
+						T3_DrawSprite(2);
+						break;
+					}
+					
+					//Else
+					default:
+						break;
+				}
+			}	
+		}
+
+		//Draws the arrow on grid 1,1
+		T3_DRAWARROW(arrowPosX,arrowPosY);
+
+
+		
+		/* if (touch.px != 0 && touch.py != 0) T3_DrawSprite(spriteNbrIndex); // Draws eiher an X or an O */
+		//------------ END DRAWING --------------
+		C3D_FrameEnd(0);
+
+
+
+
+		// Setting old touch position for the next frame
+		OldPosX = touch.px;
+		OldPosY = touch.py;
+		
+		//Wait for VBlank
+		gspWaitForVBlank();
 	}
 	// Deinitialize sprites
 		C2D_SpriteSheetFree(spriteSheet);
@@ -463,4 +534,33 @@ static int T3_DrawSprite(int type){
 
 bool checkRange(int value, int lowest, int highest) {
 	return (value <= highest && value >= lowest);
+}
+
+bool hasWon(){
+	//X 
+	//Horizontal
+	if (1 == gridCoor[0][0] && 1 == gridCoor[0][1] && 1 == gridCoor[0][2]){return true;}
+	if (gridCoor[1][0] == 1 && gridCoor[1][1] == 1 && gridCoor[1][2] == 1){return true;}
+	if (gridCoor[2][0] == 1 && gridCoor[2][1] == 1 && gridCoor[2][2] == 1){return true;}
+	//Vertical
+	if (gridCoor[0][0] == 1 && gridCoor[1][0] == 1 && gridCoor[2][0] == 1){return true;}
+	if (gridCoor[0][1] == 1 && gridCoor[1][1] == 1 && gridCoor[2][1] == 1){return true;}
+	if (gridCoor[0][2] == 1 && gridCoor[1][2] == 1 && gridCoor[2][2] == 1){return true;}
+	//Diagonal
+	if (gridCoor[0][0] == 1 && gridCoor[1][1] == 1 && gridCoor[2][2] == 1){return true;}
+	if (gridCoor[2][0] == 1 && gridCoor[1][1] == 1 && gridCoor[0][2] == 1){return true;}
+
+	//Y
+	//Horizontal
+	if (1 == gridCoor[0][0] && 2 == gridCoor[0][1] && 2 == gridCoor[0][2]){return true;}
+	if (gridCoor[1][0] == 2 && gridCoor[1][1] == 2 && gridCoor[1][2] == 2){return true;}
+	if (gridCoor[2][0] == 2 && gridCoor[2][1] == 2 && gridCoor[2][2] == 2){return true;}
+	//Vertical
+	if (gridCoor[0][0] == 2 && gridCoor[1][0] == 2 && gridCoor[2][0] == 2){return true;}
+	if (gridCoor[0][1] == 2 && gridCoor[1][1] == 2 && gridCoor[2][1] == 2){return true;}
+	if (gridCoor[0][2] == 2 && gridCoor[1][2] == 2 && gridCoor[2][2] == 2){return true;}
+	//Diagonal
+	if (gridCoor[0][0] == 2 && gridCoor[1][1] == 2 && gridCoor[2][2] == 2){return true;}
+	if (gridCoor[2][0] == 2 && gridCoor[1][1] == 2 && gridCoor[0][2] == 2){return true;}
+	return false;
 }
