@@ -121,8 +121,7 @@ int main(int argc, char*** argv[])
 	C2D_SpriteSetPos(&menuSprite->spr, SCREEN_WIDTH/2, 100.0f);
 
 	// Main loop
-	while (aptMainLoop())
-	{
+	while (aptMainLoop()) {
 		if (state == 0) {
 //=============================================================================================================
 //================================================= MAIN MENU =================================================
@@ -339,17 +338,16 @@ int main(int argc, char*** argv[])
 		
 		}
 	
+		// Deinitialize sprites
+		C2D_SpriteSheetFree(spriteSheet);
 
-	// Deinitialize sprites
-	C2D_SpriteSheetFree(spriteSheet);
-
-	// Deinitialize libraries
-	C2D_Fini();
-	C3D_Fini();
-	gfxExit();
-	romfsExit();
-	return 0;
-}
+		// Deinitialize libraries
+		C2D_Fini();
+		C3D_Fini();
+		gfxExit();
+		romfsExit();
+		return 0;
+	}
 }
 //Checks the time from 0 to now
 double checkTime(){
