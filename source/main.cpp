@@ -54,7 +54,7 @@ int arrowPosX;
 int arrowPosY;
 
 //Main method
-int main(int argc, char*** argv[])
+int main(int argc, char**)
 {
 	//Wrapper for \ref romfsMountSelf with the default "romfs" device name.
 	romfsInit();
@@ -338,7 +338,9 @@ int main(int argc, char*** argv[])
 		
 		}
 	
-		// Deinitialize sprites
+		
+	}
+	// Deinitialize sprites
 		C2D_SpriteSheetFree(spriteSheet);
 
 		// Deinitialize libraries
@@ -347,7 +349,6 @@ int main(int argc, char*** argv[])
 		gfxExit();
 		romfsExit();
 		return 0;
-	}
 }
 //Checks the time from 0 to now
 double checkTime(){
