@@ -337,7 +337,11 @@ int main(int argc, char**)
 		
 
 			if(hasWon() != 0){
-				std::cout << "\n" << hasWon() << " WON!"; // 1 = X; 2 = O
+				if (hasWon() == 1) {
+					std::cout << "\nX WON!";
+				} else if (hasWon() == 2) {
+					std::cout << "\nO WON!";
+				}
 			}
 
 			
