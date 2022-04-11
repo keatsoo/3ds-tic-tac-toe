@@ -336,7 +336,9 @@ int main(int argc, char**)
 			gfxSwapBuffers();*/
 		
 
-
+			if(hasWon()){
+				std::cout << "\nYOU WON!";
+			}
 
 			
 			// draw frame
@@ -392,6 +394,8 @@ int main(int argc, char**)
 			/* if (touch.px != 0 && touch.py != 0) T3_DrawSprite(spriteNbrIndex); // Draws eiher an X or an O */
 			//------------ END DRAWING --------------
 			C3D_FrameEnd(0);
+
+			
 
 			// Setting old touch position for the next frame
 			OldPosX = touch.px;
