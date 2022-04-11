@@ -8,7 +8,7 @@
 
 //Needs to be the right ammount of sprite, otherwise crash on the 3ds :(
 #define MAX_SPRITES 4
-#define MAX_MENU_SPRITES 3
+#define MAX_MENU_SPRITES 5
 //Sets the width and height of the screen
 #define SCREEN_WIDTH  320
 #define SCREEN_HEIGHT 240
@@ -38,7 +38,6 @@ int IndexEachTick(0);
 static void initImages();
 static int T3_DrawSprite(int type);
 static int T3_DRAWARROW(int x, int y);
-static bool isButtonClicked(touchPosition touch, int rangeX, int rangeY, int x, int y);
 
 static touchPosition touch;
 
@@ -93,7 +92,7 @@ int main(int argc, char*** argv[])
 
 	bool hasBeenPressed = false;
 	int whosPressed;
-	// bool animationEnded = false;
+	bool online = false;
 	int animationStep = 0;
 
 	Sprite* menuSprite = &menuSprites[0];
@@ -111,10 +110,23 @@ int main(int argc, char*** argv[])
 	C2D_SpriteSetCenter(&menuSprite->spr, 0.5f, 0.0f);
 	C2D_SpriteSetPos(&menuSprite->spr, SCREEN_WIDTH/2, 174.0f);
 
+	menuSprite = &menuSprites[3];
+	C2D_SpriteFromSheet(&menuSprite->spr, mainMenuSheet, 3);
+	C2D_SpriteSetCenter(&menuSprite->spr, 0.5f, 0.0f);
+	C2D_SpriteSetPos(&menuSprite->spr, SCREEN_WIDTH/2, 0.0f);
+
+	menuSprite = &menuSprites[4];
+	C2D_SpriteFromSheet(&menuSprite->spr, mainMenuSheet, 4);
+	C2D_SpriteSetCenter(&menuSprite->spr, 0.5f, 0.0f);
+	C2D_SpriteSetPos(&menuSprite->spr, SCREEN_WIDTH/2, 100.0f);
+
 	// Main loop
 	while (aptMainLoop())
 	{
 		if (state == 0) {
+//=============================================================================================================
+//================================================= MAIN MENU =================================================
+//=============================================================================================================
 			hidScanInput();
 			hidTouchRead(&touch);
 
@@ -124,15 +136,16 @@ int main(int argc, char*** argv[])
 
 			consoleClear();
 			std::cout << "Press A to start the game\nPress START to quit.";
+			std::cout << "\nTouch coordinates are " << touch.px << " ; " << touch.py;
 			
 			if (kDown & KEY_A) {
 				state = 1;
 			}
 
-			if (isButtonClicked(touch, (195/2) - 1, (37/2)-1, SCREEN_WIDTH/2, 112.0f)){
+			if (checkRange(touch.px, (SCREEN_WIDTH/2) - (257 - 63/2), (SCREEN_WIDTH/2) + (257 - 63/2)) && checkRange(touch.py, 113 + (147 - 113/2), 113 - (147 - 113/2))){  // (checkRange(touch.px, (SCREEN_WIDTH/2) - (257 - 63/2), (SCREEN_WIDTH/2) + (257 - 63/2)) && checkRange(touch.py, 113 + (147 - 113/2), 113 - (147 - 113/2)))
 				hasBeenPressed = true;
 				whosPressed = 1;
-			} else if (isButtonClicked(touch, (195/2) - 1, (37/2)-1, SCREEN_WIDTH/2, 174.0f)){
+			} else if (checkRange(touch.px, (SCREEN_WIDTH/2) - (257 - 63/2), (SCREEN_WIDTH/2) + (257 - 63/2)) && checkRange(touch.py, 174 + (147 - 113/2), 174 - (147 - 113/2))){ // (checkRange(touch.px, (SCREEN_WIDTH/2) - (257 - 63/2), (SCREEN_WIDTH/2) + (257 - 63/2)) && checkRange(touch.py, 174 + (147 - 113/2), 174 - (147 - 113/2)))
 				hasBeenPressed = true;
 				whosPressed = 2;
 			}
@@ -140,7 +153,11 @@ int main(int argc, char*** argv[])
 			if (hasBeenPressed) {
 				std::cout << "\nButton number " << whosPressed << " has been pressed.";
 				animationStep++;
-				if (animationStep >= 500) {hasBeenPressed = false;}
+				if (whosPressed == 2) {online = true;}
+				if (animationStep >= 500) {
+					hasBeenPressed = false;
+					online = false;
+				}
 			}
 			
 
@@ -152,6 +169,11 @@ int main(int argc, char*** argv[])
 			C2D_DrawSprite(&menuSprites[0].spr);
 			C2D_DrawSprite(&menuSprites[1].spr);
 			C2D_DrawSprite(&menuSprites[2].spr);
+
+			if (online) {
+				C2D_DrawSprite(&menuSprites[3].spr);
+				C2D_DrawSprite(&menuSprites[4].spr);
+			}
 		
 			C3D_FrameEnd(0);
 			// end frame
@@ -160,6 +182,10 @@ int main(int argc, char*** argv[])
 			gspWaitForVBlank();
 
 		} else if (state == 1) {
+
+//=============================================================================================================
+//=====================================================  GAME =================================================
+//=============================================================================================================
 			
 			//Starts listening to inputs
 			hidScanInput();
@@ -310,8 +336,9 @@ int main(int argc, char*** argv[])
 			
 			//Wait for VBlank
 			gspWaitForVBlank();
+		
 		}
-	}
+	
 
 	// Deinitialize sprites
 	C2D_SpriteSheetFree(spriteSheet);
@@ -323,7 +350,7 @@ int main(int argc, char*** argv[])
 	romfsExit();
 	return 0;
 }
-
+}
 //Checks the time from 0 to now
 double checkTime(){
 	return difftime(time(0), start); 
@@ -372,10 +399,4 @@ static int T3_DrawSprite(int type){
 
 bool checkRange(int value, int lowest, int highest) {
 	return (value <= highest && value >= lowest);
-}
-
-static bool isButtonClicked(touchPosition touch, int rangeX, int rangeY, int x, int y) {
-	bool isClickedX = checkRange(touch.px, x - rangeX, x + rangeX);
-	bool isClickedY = checkRange(touch.py, y - rangeY, y + rangeY);
-	return (isClickedX || isClickedY);
 }
