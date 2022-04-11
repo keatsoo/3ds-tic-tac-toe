@@ -4,11 +4,10 @@
 #include <iostream>
 #include <assert.h>
 #include <time.h>
-#include <cmath>
 
 //Needs to be the right ammount of sprite, otherwise crash on the 3ds :(
 #define MAX_SPRITES 4
-#define MAX_MENU_SPRITES 5
+#define MAX_MENU_SPRITES 6
 //Sets the width and height of the screen
 #define SCREEN_WIDTH  320
 #define SCREEN_HEIGHT 240
@@ -91,9 +90,9 @@ int main(int argc, char**)
 	u16 OldPosY = 0;
 
 	bool hasBeenPressed = false;
-	int whosPressed;
+	int whosPressed = 0;
 	bool online = false;
-	int animationStep = 0;
+	//int animationStep = 0;
 
 	Sprite* menuSprite = &menuSprites[0];
 	C2D_SpriteFromSheet(&menuSprite->spr, mainMenuSheet, 0);
@@ -117,8 +116,19 @@ int main(int argc, char**)
 
 	menuSprite = &menuSprites[4];
 	C2D_SpriteFromSheet(&menuSprite->spr, mainMenuSheet, 4);
-	C2D_SpriteSetCenter(&menuSprite->spr, 0.5f, 0.0f);
-	C2D_SpriteSetPos(&menuSprite->spr, SCREEN_WIDTH/2, 100.0f);
+	C2D_SpriteSetCenter(&menuSprite->spr, 0.5f, 0.5f);
+	C2D_SpriteSetPos(&menuSprite->spr, SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
+
+	menuSprite = &menuSprites[5];
+	C2D_SpriteFromSheet(&menuSprite->spr, mainMenuSheet, 5);
+	C2D_SpriteSetCenter(&menuSprite->spr, 0.5f, 0.5f);
+	C2D_SpriteSetPos(&menuSprite->spr, SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
+
+	int timePassed; 
+	int timesHappened = 0;
+	int timeStartLoading = 0;
+	int mainButtonSelect = 0;
+	int mainSelected = 0;
 
 	// Main loop
 	while (aptMainLoop()) {
@@ -136,28 +146,54 @@ int main(int argc, char**)
 			consoleClear();
 			std::cout << "Press A to start the game\nPress START to quit.";
 			std::cout << "\nTouch coordinates are " << touch.px << " ; " << touch.py;
-			
-			if (kDown & KEY_A) {
-				state = 1;
-			}
 
-			if (checkRange(touch.px, (SCREEN_WIDTH/2) - (257 - 63/2), (SCREEN_WIDTH/2) + (257 - 63/2)) && checkRange(touch.py, 113 + (147 - 113/2), 113 - (147 - 113/2))){  // (checkRange(touch.px, (SCREEN_WIDTH/2) - (257 - 63/2), (SCREEN_WIDTH/2) + (257 - 63/2)) && checkRange(touch.py, 113 + (147 - 113/2), 113 - (147 - 113/2)))
+			if ((((SCREEN_WIDTH / 2) + ( (257 - 63) / 2 )) > touch.px && ((SCREEN_WIDTH / 2) - ( (257 - 63) / 2 )) < touch.px) && (147 > touch.py && 112 < touch.py)){  // ((SCREEN_WIDTH / 2) + ( (257 - 63) / 2 )) > touch.px && ((SCREEN_WIDTH / 2) - ( (257 - 63) / 2 )) < touch.px   
 				hasBeenPressed = true;
 				whosPressed = 1;
-			} else if (checkRange(touch.px, (SCREEN_WIDTH/2) - (257 - 63/2), (SCREEN_WIDTH/2) + (257 - 63/2)) && checkRange(touch.py, 174 + (147 - 113/2), 174 - (147 - 113/2))){ // (checkRange(touch.px, (SCREEN_WIDTH/2) - (257 - 63/2), (SCREEN_WIDTH/2) + (257 - 63/2)) && checkRange(touch.py, 174 + (147 - 113/2), 174 - (147 - 113/2)))
+			} else if ((((SCREEN_WIDTH / 2) + ( (257 - 63) / 2 )) > touch.px && ((SCREEN_WIDTH / 2) - ( (257 - 63) / 2 )) < touch.px) && (209 > touch.py && 174 < touch.py)){ // (checkRange(touch.px, (SCREEN_WIDTH/2) - (257 - 63/2), (SCREEN_WIDTH/2) + (257 - 63/2)) && checkRange(touch.py, 174 + (147 - 113/2), 174 - (147 - 113/2)))
 				hasBeenPressed = true;
 				whosPressed = 2;
 			}
 
+			if (whosPressed == 1) state++;
+
+			timePassed = round(checkTime());
+
 			if (hasBeenPressed) {
 				std::cout << "\nButton number " << whosPressed << " has been pressed.";
-				animationStep++;
-				if (whosPressed == 2) {online = true;}
-				if (animationStep >= 500) {
+				if (whosPressed == 2) online = true;
+				if (timePassed % 5 > 3) {
 					hasBeenPressed = false;
 					online = false;
 				}
 			}
+
+			if (kDown & KEY_UP) {
+				if (mainButtonSelect == 0) {mainButtonSelect++;} else {mainButtonSelect--;}
+			} else if (kDown & KEY_DOWN) {
+				mainButtonSelect++;
+			}
+
+			int mainSelected = mainButtonSelect % 2;
+
+			if (kDown & KEY_A) {
+				hasBeenPressed = true;
+				whosPressed = mainSelected + 1;
+			}
+
+			std::cout << "\nmainButtonSelect = " << mainButtonSelect << " and mainSelected is " << mainSelected;
+
+			//Sprite pointer called sprite that points towards the memory adress of index 3 of the array sprites
+			Sprite* arrowSprite = &sprites[3];
+
+			if (mainSelected == 0) {
+				C2D_SpriteSetPos(&arrowSprite->spr, 40, 130);
+			} else if (mainSelected == 1) {
+				C2D_SpriteSetPos(&arrowSprite->spr, 40, 192);
+			}
+
+			//Move sprite (absolute), derefrensing the sprite and using the ptr in the Sprite struct as the pointer to the sprite, sets x and y pos
+			// C2D_SpriteSetPos(&sprite->spr, ((SCREEN_WIDTH / 3) * x) + 5, ((SCREEN_WIDTH / 3.8) * y) + 35);
 			
 
 			// start frame
@@ -173,6 +209,8 @@ int main(int argc, char**)
 				C2D_DrawSprite(&menuSprites[3].spr);
 				C2D_DrawSprite(&menuSprites[4].spr);
 			}
+
+			T3_DrawSprite(3);
 		
 			C3D_FrameEnd(0);
 			// end frame
@@ -181,6 +219,33 @@ int main(int argc, char**)
 			gspWaitForVBlank();
 
 		} else if (state == 1) {
+//=============================================================================================================
+//=================================================== LOADING =================================================
+//=============================================================================================================
+			if (timesHappened == 0) {
+				timeStartLoading = round(checkTime());
+				timesHappened++;
+			}
+
+			timePassed = round(checkTime());
+			int timeLoading = timePassed - timeStartLoading;
+			
+			consoleClear();
+			std::cout << "Loading game... (actually not but its just so \nu have time to remove ur pen)";
+
+			if (timeLoading == 3) state++;
+
+			C3D_FrameBegin(C3D_FRAME_SYNCDRAW);
+			C2D_TargetClear(top, C2D_Color32f(0.0f, 0.5f, 0.0f, 1.0f));
+			C2D_SceneBegin(top); 
+
+			C2D_DrawSprite(&menuSprites[5].spr);
+		
+			C3D_FrameEnd(0);
+
+			//Wait for VBlank
+			gspWaitForVBlank();
+		} else if (state == 2) {
 
 //=============================================================================================================
 //=====================================================  GAME =================================================
@@ -212,7 +277,7 @@ int main(int argc, char**)
 
 
 			// Checks time, clears the console then outputs the time that has passed
-			int timePassed = round(checkTime());
+			timePassed = round(checkTime());
 			//Either is 0 or 1, switches between each second
 			IndexEachTick = timePassed % 2;
 
