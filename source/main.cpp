@@ -471,30 +471,21 @@ bool checkRange(int value, int lowest, int highest) {
 }
 
 int hasWon(){
-	//X 
-	//Horizontal
-	if (1 == gridCoor[0][0] && 1 == gridCoor[0][1] && 1 == gridCoor[0][2]){return 1;}
-	if (gridCoor[1][0] == 1 && gridCoor[1][1] == 1 && gridCoor[1][2] == 1){return 1;}
-	if (gridCoor[2][0] == 1 && gridCoor[2][1] == 1 && gridCoor[2][2] == 1){return 1;}
-	//Vertical
-	if (gridCoor[0][0] == 1 && gridCoor[1][0] == 1 && gridCoor[2][0] == 1){return 1;}
-	if (gridCoor[0][1] == 1 && gridCoor[1][1] == 1 && gridCoor[2][1] == 1){return 1;}
-	if (gridCoor[0][2] == 1 && gridCoor[1][2] == 1 && gridCoor[2][2] == 1){return 1;}
+	//	Horizontal
+	for (int i = 0; i < 3; i++)
+	{
+		if (1 == gridCoor[i][i] && 1 == gridCoor[i][i+1] && 1 == gridCoor[i][i+2]){return gridCoor[i][i];}
+	}
+
+	// Vertical
+	for (int i = 0; i < 3; i++)
+	{
+		if (1 == gridCoor[i][i] && 1 == gridCoor[i+1][i] && 1 == gridCoor[i+2][i]){return gridCoor[i][i];}
+	}
+
 	//Diagonal
 	if (gridCoor[0][0] == 1 && gridCoor[1][1] == 1 && gridCoor[2][2] == 1){return 1;}
 	if (gridCoor[2][0] == 1 && gridCoor[1][1] == 1 && gridCoor[0][2] == 1){return 1;}
-
-	//O
-	//Horizontal
-	if (1 == gridCoor[0][0] && 2 == gridCoor[0][1] && 2 == gridCoor[0][2]){return 2;}
-	if (gridCoor[1][0] == 2 && gridCoor[1][1] == 2 && gridCoor[1][2] == 2){return 2;}
-	if (gridCoor[2][0] == 2 && gridCoor[2][1] == 2 && gridCoor[2][2] == 2){return 2;}
-	//Vertical
-	if (gridCoor[0][0] == 2 && gridCoor[1][0] == 2 && gridCoor[2][0] == 2){return 2;}
-	if (gridCoor[0][1] == 2 && gridCoor[1][1] == 2 && gridCoor[2][1] == 2){return 2;}
-	if (gridCoor[0][2] == 2 && gridCoor[1][2] == 2 && gridCoor[2][2] == 2){return 2;}
-	//Diagonal
-	if (gridCoor[0][0] == 2 && gridCoor[1][1] == 2 && gridCoor[2][2] == 2){return 2;}
-	if (gridCoor[2][0] == 2 && gridCoor[1][1] == 2 && gridCoor[0][2] == 2){return 2;}
+	
 	return 0;
 }
