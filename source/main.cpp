@@ -49,6 +49,7 @@ int turn; // Whose turn it is, the only values are 1 (X) and 2 (O)
 
 bool checkRange(int value, int lowest, int highest);
 int hasWon();
+bool gameTie();
 
 int arrowPosX;
 int arrowPosY;
@@ -85,10 +86,6 @@ int main(int argc, char**)
 
 	// Initialize game sprites
 	initImages();
-
-	// Setting old touch position
-	u16 OldPosX = 0;
-	u16 OldPosY = 0;
 
 	bool hasBeenPressed = false;
 	int whosPressed = 0;
@@ -333,10 +330,14 @@ int main(int argc, char**)
 	
 			if(hasWon() != 0){
 				if (hasWon() == 1) {
-					std::cout << "\nX WON!";
+					std::cout << "\n\nX WON !";
 				} else if (hasWon() == 2) {
-					std::cout << "\nO WON!";
+					std::cout << "\n\nO WON !";
 				}
+			}
+
+			if (gameTie()){
+				std::cout << "\n\nTIE !";
 			}
 
 			
@@ -477,4 +478,23 @@ int hasWon(){
 	if (gridCoor[2][0] == 1 && gridCoor[1][1] == 1 && gridCoor[0][2] == 1){return 1;}
 	
 	return 0;
+}
+
+bool gameTie() {
+	int numberOfFullCases = 0;
+	for (int y = 0; y < 3; y++){
+		for (int x = 0; x < 3; x++){
+			if (gridCoor[x][y] != 0) {
+				numberOfFullCases++;
+			}
+		}
+	}
+
+	if (numberOfFullCases >= 9){
+		if(hasWon() == 0) {
+			return true;
+		}
+	}
+	
+	return false;
 }
