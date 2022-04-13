@@ -92,6 +92,7 @@ int main(int argc, char**)
 	bool online = false;
 	//int animationStep = 0;
 
+	//Init all homemenu Sprites by reassigning them to the same variable and setting their pos
 	Sprite* menuSprite = &menuSprites[0];
 	C2D_SpriteFromSheet(&menuSprite->spr, mainMenuSheet, 0);
 	C2D_SpriteSetCenter(&menuSprite->spr, 0.5f, 0.0f);
@@ -130,6 +131,7 @@ int main(int argc, char**)
 
 	// Main loop
 	while (aptMainLoop()) {
+		//If in main Menu
 		if (state == 0) {
 //=============================================================================================================
 //================================================= MAIN MENU =================================================
@@ -145,6 +147,7 @@ int main(int argc, char**)
 			std::cout << "Press A to start the game\nPress START to quit.";
 			std::cout << "\nTouch coordinates are " << touch.px << " ; " << touch.py;
 
+			//Check what button be pressed
 			if ((((SCREEN_WIDTH / 2) + ( (257 - 63) / 2 )) > touch.px && ((SCREEN_WIDTH / 2) - ( (257 - 63) / 2 )) < touch.px) && (147 > touch.py && 112 < touch.py)){  // ((SCREEN_WIDTH / 2) + ( (257 - 63) / 2 )) > touch.px && ((SCREEN_WIDTH / 2) - ( (257 - 63) / 2 )) < touch.px   
 				hasBeenPressed = true;
 				whosPressed = 1;
@@ -153,27 +156,36 @@ int main(int argc, char**)
 				whosPressed = 2;
 			}
 
+			//Advance stage when clicking on singleplayer
 			if (whosPressed == 1) state++;
 
+			//Check time
 			timePassed = round(checkTime());
 
+			//If you pressed the button
 			if (hasBeenPressed) {
 				std::cout << "\nButton number " << whosPressed << " has been pressed.";
+				//If it was online button
 				if (whosPressed == 2) online = true;
+				//waits 3 second
 				if (timePassed % 5 > 3) {
 					hasBeenPressed = false;
 					online = false;
 				}
 			}
 
+			//If press key up
 			if (kDown & KEY_UP) {
 				if (mainButtonSelect == 0) {mainButtonSelect++;} else {mainButtonSelect--;}
+				//if down
 			} else if (kDown & KEY_DOWN) {
 				mainButtonSelect++;
 			}
 
+			//Check if mainButtonSelect is even
 			int mainSelected = mainButtonSelect % 2;
 
+			//If press a
 			if (kDown & KEY_A) {
 				hasBeenPressed = true;
 				whosPressed = mainSelected + 1;
@@ -184,8 +196,10 @@ int main(int argc, char**)
 			//Sprite pointer called sprite that points towards the memory adress of index 3 of the array sprites
 			Sprite* arrowSprite = &sprites[3];
 
+			//If even, move arrow to singleplayer
 			if (mainSelected == 0) {
 				C2D_SpriteSetPos(&arrowSprite->spr, 40, 130);
+				//If odd, move arrow to online
 			} else if (mainSelected == 1) {
 				C2D_SpriteSetPos(&arrowSprite->spr, 40, 192);
 			}
@@ -199,15 +213,18 @@ int main(int argc, char**)
 			C2D_TargetClear(top, C2D_Color32f(0.0f, 0.5f, 0.0f, 1.0f));
 			C2D_SceneBegin(top); 
 
+			//Draws the sprites
 			C2D_DrawSprite(&menuSprites[0].spr);
 			C2D_DrawSprite(&menuSprites[1].spr);
 			C2D_DrawSprite(&menuSprites[2].spr);
 
+			//If online is true, draws the online assets
 			if (online) {
 				C2D_DrawSprite(&menuSprites[3].spr);
 				C2D_DrawSprite(&menuSprites[4].spr);
 			}
-
+			
+			//Draws sprite 3
 			T3_DrawSprite(3);
 		
 			C3D_FrameEnd(0);
@@ -215,28 +232,30 @@ int main(int argc, char**)
 				
 			//Wait for VBlank
 			gspWaitForVBlank();
-
+		
+		//If in loading
 		} else if (state == 1) {
 //=============================================================================================================
 //=================================================== LOADING =================================================
 //=============================================================================================================
 			if (timesHappened == 0) {
+				//Get time when boot in loading screen
 				timeStartLoading = round(checkTime());
 				timesHappened++;
 			}
-
+			//Checks how much time be passed after it was first loaded
 			timePassed = round(checkTime());
 			int timeLoading = timePassed - timeStartLoading;
 			
 			consoleClear();
 			std::cout << "Loading game... (actually not but its just so \nu have time to remove ur pen)";
-
+			//If time is 3 seconds, it goes to next game state
 			if (timeLoading == 3) state++;
 
 			C3D_FrameBegin(C3D_FRAME_SYNCDRAW);
 			C2D_TargetClear(top, C2D_Color32f(0.0f, 0.5f, 0.0f, 1.0f));
 			C2D_SceneBegin(top); 
-
+			//draws the loading screen
 			C2D_DrawSprite(&menuSprites[5].spr);
 		
 			C3D_FrameEnd(0);
