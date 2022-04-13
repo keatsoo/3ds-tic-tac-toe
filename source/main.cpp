@@ -49,6 +49,7 @@ int turn; // Whose turn it is, the only values are 1 (X) and 2 (O)
 
 bool checkRange(int value, int lowest, int highest);
 int hasWon();
+bool gameTie();
 
 int arrowPosX;
 int arrowPosY;
@@ -70,7 +71,7 @@ int main(int argc, char**)
 	consoleInit(GFX_TOP, NULL);
 
 	//Array of our names, const since it wont change
-	const char *credits[2] = { "kitsou", "pvpb0t"};
+	const char *credits[3] = {"kitsou", "pvpb0t", "Speedyrogue"};
 
 	// Create screens
 	C3D_RenderTarget* top = C2D_CreateScreenTarget(GFX_BOTTOM, GFX_LEFT);
@@ -85,10 +86,6 @@ int main(int argc, char**)
 
 	// Initialize game sprites
 	initImages();
-
-	// Setting old touch position
-	u16 OldPosX = 0;
-	u16 OldPosY = 0;
 
 	bool hasBeenPressed = false;
 	int whosPressed = 0;
@@ -280,7 +277,7 @@ int main(int argc, char**)
 			// Checks time, clears the console then outputs the time that has passed
 			timePassed = round(checkTime());
 			//Either is 0 or 1, switches between each second
-			IndexEachTick = timePassed % 2;
+			IndexEachTick = timePassed % 3;
 
 			//Clears the screen by using iprintf("
 			consoleClear();
@@ -294,10 +291,6 @@ int main(int argc, char**)
 			std::cout << "\n\nYou are on the case " << caseX << " ; " << caseY;
 			std::cout << "\nTouch coordinates are : " << touch.px << " ; " << touch.py;
 			std::cout << "\nYou are on round " << gameRound << " and it is turn " << turn << ".";
-			// Checks if there is a new touch position, if yes, then round++
-			if (((!checkRange(touch.px, OldPosX - 5, OldPosX + 5) && touch.px != 0) && gridCoor[caseX][caseY] == 0) || ((!checkRange(touch.py, OldPosY - 5, OldPosY + 5) && touch.py != 0) && gridCoor[caseX][caseY] == 0)) gameRound++;
-			// Changes turn (alternates between 1 and 2)
-			turn = (gameRound % 2) + 1;
 
 			//If touch position is not 0 and the square the touched point is inside is empty (gridcoord[][] = 0)
 			if (touch.px != 0 && touch.py != 0){
@@ -305,7 +298,8 @@ int main(int argc, char**)
 					//Either is 1 or 2 depending on the turn
 					gridCoor[caseX][caseY] = turn;
 					//If the square is already clicked, write text to console
-				} else if (gridCoor[caseX][caseY] != 0) {
+					gameRound++;
+				} else {
 					std::cout << "\nThis case is occupied.";
 				}
 			}
@@ -331,17 +325,19 @@ int main(int argc, char**)
 					std::cout << "\nThis case is occupied.";
 				}
 
-			/*// Flush and swap the framebuffers
-			gfxFlushBuffers();
-			gfxSwapBuffers();*/
-		
-
+			// Changes turn (alternates between 1 and 2)
+			turn = (gameRound % 2) + 1;
+	
 			if(hasWon() != 0){
 				if (hasWon() == 1) {
-					std::cout << "\nX WON!";
+					std::cout << "\n\nX WON !";
 				} else if (hasWon() == 2) {
-					std::cout << "\nO WON!";
+					std::cout << "\n\nO WON !";
 				}
+			}
+
+			if (gameTie()){
+				std::cout << "\n\nTIE !";
 			}
 
 			
@@ -399,12 +395,6 @@ int main(int argc, char**)
 			//------------ END DRAWING --------------
 			C3D_FrameEnd(0);
 
-			
-
-			// Setting old touch position for the next frame
-			OldPosX = touch.px;
-			OldPosY = touch.py;
-			
 			//Wait for VBlank
 			gspWaitForVBlank();
 		
@@ -471,30 +461,40 @@ bool checkRange(int value, int lowest, int highest) {
 }
 
 int hasWon(){
-	//X 
-	//Horizontal
-	if (1 == gridCoor[0][0] && 1 == gridCoor[0][1] && 1 == gridCoor[0][2]){return 1;}
-	if (gridCoor[1][0] == 1 && gridCoor[1][1] == 1 && gridCoor[1][2] == 1){return 1;}
-	if (gridCoor[2][0] == 1 && gridCoor[2][1] == 1 && gridCoor[2][2] == 1){return 1;}
-	//Vertical
-	if (gridCoor[0][0] == 1 && gridCoor[1][0] == 1 && gridCoor[2][0] == 1){return 1;}
-	if (gridCoor[0][1] == 1 && gridCoor[1][1] == 1 && gridCoor[2][1] == 1){return 1;}
-	if (gridCoor[0][2] == 1 && gridCoor[1][2] == 1 && gridCoor[2][2] == 1){return 1;}
+	//	Horizontal
+	for (int i = 0; i < 3; i++)
+	{
+		if (1 == gridCoor[i][i] && 1 == gridCoor[i][i+1] && 1 == gridCoor[i][i+2]){return gridCoor[i][i];}
+	}
+
+	// Vertical
+	for (int i = 0; i < 3; i++)
+	{
+		if (1 == gridCoor[i][i] && 1 == gridCoor[i+1][i] && 1 == gridCoor[i+2][i]){return gridCoor[i][i];}
+	}
+
 	//Diagonal
 	if (gridCoor[0][0] == 1 && gridCoor[1][1] == 1 && gridCoor[2][2] == 1){return 1;}
 	if (gridCoor[2][0] == 1 && gridCoor[1][1] == 1 && gridCoor[0][2] == 1){return 1;}
-
-	//O
-	//Horizontal
-	if (1 == gridCoor[0][0] && 2 == gridCoor[0][1] && 2 == gridCoor[0][2]){return 2;}
-	if (gridCoor[1][0] == 2 && gridCoor[1][1] == 2 && gridCoor[1][2] == 2){return 2;}
-	if (gridCoor[2][0] == 2 && gridCoor[2][1] == 2 && gridCoor[2][2] == 2){return 2;}
-	//Vertical
-	if (gridCoor[0][0] == 2 && gridCoor[1][0] == 2 && gridCoor[2][0] == 2){return 2;}
-	if (gridCoor[0][1] == 2 && gridCoor[1][1] == 2 && gridCoor[2][1] == 2){return 2;}
-	if (gridCoor[0][2] == 2 && gridCoor[1][2] == 2 && gridCoor[2][2] == 2){return 2;}
-	//Diagonal
-	if (gridCoor[0][0] == 2 && gridCoor[1][1] == 2 && gridCoor[2][2] == 2){return 2;}
-	if (gridCoor[2][0] == 2 && gridCoor[1][1] == 2 && gridCoor[0][2] == 2){return 2;}
+	
 	return 0;
+}
+
+bool gameTie() {
+	int numberOfFullCases = 0;
+	for (int y = 0; y < 3; y++){
+		for (int x = 0; x < 3; x++){
+			if (gridCoor[x][y] != 0) {
+				numberOfFullCases++;
+			}
+		}
+	}
+
+	if (numberOfFullCases >= 9){
+		if(hasWon() == 0) {
+			return true;
+		}
+	}
+	
+	return false;
 }
