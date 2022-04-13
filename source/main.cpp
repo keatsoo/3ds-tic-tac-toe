@@ -70,7 +70,7 @@ int main(int argc, char**)
 	consoleInit(GFX_TOP, NULL);
 
 	//Array of our names, const since it wont change
-	const char *credits[2] = { "kitsou", "pvpb0t"};
+	const char *credits[3] = {"kitsou", "pvpb0t", "Speedyrogue"};
 
 	// Create screens
 	C3D_RenderTarget* top = C2D_CreateScreenTarget(GFX_BOTTOM, GFX_LEFT);
@@ -280,7 +280,7 @@ int main(int argc, char**)
 			// Checks time, clears the console then outputs the time that has passed
 			timePassed = round(checkTime());
 			//Either is 0 or 1, switches between each second
-			IndexEachTick = timePassed % 2;
+			IndexEachTick = timePassed % 3;
 
 			//Clears the screen by using iprintf("
 			consoleClear();
@@ -294,10 +294,6 @@ int main(int argc, char**)
 			std::cout << "\n\nYou are on the case " << caseX << " ; " << caseY;
 			std::cout << "\nTouch coordinates are : " << touch.px << " ; " << touch.py;
 			std::cout << "\nYou are on round " << gameRound << " and it is turn " << turn << ".";
-			// Checks if there is a new touch position, if yes, then round++
-			if (((!checkRange(touch.px, OldPosX - 5, OldPosX + 5) && touch.px != 0) && gridCoor[caseX][caseY] == 0) || ((!checkRange(touch.py, OldPosY - 5, OldPosY + 5) && touch.py != 0) && gridCoor[caseX][caseY] == 0)) gameRound++;
-			// Changes turn (alternates between 1 and 2)
-			turn = (gameRound % 2) + 1;
 
 			//If touch position is not 0 and the square the touched point is inside is empty (gridcoord[][] = 0)
 			if (touch.px != 0 && touch.py != 0){
@@ -305,7 +301,8 @@ int main(int argc, char**)
 					//Either is 1 or 2 depending on the turn
 					gridCoor[caseX][caseY] = turn;
 					//If the square is already clicked, write text to console
-				} else if (gridCoor[caseX][caseY] != 0) {
+					gameRound++;
+				} else {
 					std::cout << "\nThis case is occupied.";
 				}
 			}
@@ -331,11 +328,9 @@ int main(int argc, char**)
 					std::cout << "\nThis case is occupied.";
 				}
 
-			/*// Flush and swap the framebuffers
-			gfxFlushBuffers();
-			gfxSwapBuffers();*/
-		
-
+			// Changes turn (alternates between 1 and 2)
+			turn = (gameRound % 2) + 1;
+	
 			if(hasWon() != 0){
 				if (hasWon() == 1) {
 					std::cout << "\nX WON!";
@@ -399,12 +394,6 @@ int main(int argc, char**)
 			//------------ END DRAWING --------------
 			C3D_FrameEnd(0);
 
-			
-
-			// Setting old touch position for the next frame
-			OldPosX = touch.px;
-			OldPosY = touch.py;
-			
 			//Wait for VBlank
 			gspWaitForVBlank();
 		
