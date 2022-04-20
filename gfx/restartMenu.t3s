@@ -1,0 +1,7 @@
+--atlas -f rgba8888 -z auto
+XWon.png
+OWon.png
+tie.png
+resetButton.png
+menuButton.png
+quitButton.png

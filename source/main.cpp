@@ -8,6 +8,7 @@
 //Needs to be the right ammount of sprite, otherwise crash on the 3ds :(
 #define MAX_SPRITES 4
 #define MAX_MENU_SPRITES 6
+#define MAX_RESET_SPRITES 6
 //Sets the width and height of the screen
 #define SCREEN_WIDTH  320
 #define SCREEN_HEIGHT 240
@@ -26,7 +27,9 @@ static Sprite sprites[MAX_SPRITES];
 
 static C2D_SpriteSheet mainMenuSheet;
 static Sprite menuSprites[MAX_MENU_SPRITES];
-//static size_t numSprites = MAX_SPRITES/2;
+
+static C2D_SpriteSheet resetSheet;
+static Sprite resetSprites[MAX_RESET_SPRITES];
 
 //Timer
 time_t start = time(0);
@@ -37,6 +40,7 @@ int IndexEachTick(0);
 static void initImages();
 static int T3_DrawSprite(int type);
 static int T3_DRAWARROW(int x, int y);
+static void T3_DrawReset(int win, bool tie);
 
 static touchPosition touch;
 
@@ -84,6 +88,10 @@ int main(int argc, char**)
 	mainMenuSheet = C2D_SpriteSheetLoad("romfs:/gfx/mainMenuSprites.t3x");
 	if (!mainMenuSheet) svcBreak(USERBREAK_PANIC);
 
+	// Load reset menu graphics
+	resetSheet = C2D_SpriteSheetLoad("romfs:/gfx/restartMenuSprites.t3x");
+	if (!resetSheet) svcBreak(USERBREAK_PANIC);
+
 	// Initialize game sprites
 	initImages();
 
@@ -122,6 +130,37 @@ int main(int argc, char**)
 	C2D_SpriteFromSheet(&menuSprite->spr, mainMenuSheet, 5);
 	C2D_SpriteSetCenter(&menuSprite->spr, 0.5f, 0.5f);
 	C2D_SpriteSetPos(&menuSprite->spr, SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
+
+	//Init all reset menu Sprites by reassigning them to the same variable and setting their pos
+	Sprite* resetSprite = &resetSprites[0];
+	C2D_SpriteFromSheet(&resetSprite->spr, resetSheet, 0);
+	C2D_SpriteSetCenter(&resetSprite->spr, 0.5f, 0.5f);
+	C2D_SpriteSetPos(&resetSprite->spr, SCREEN_WIDTH/2, SCREEN_HEIGHT/5);
+
+	resetSprite = &resetSprites[1];
+	C2D_SpriteFromSheet(&resetSprite->spr, resetSheet, 1);
+	C2D_SpriteSetCenter(&resetSprite->spr, 0.5f, 0.5f);
+	C2D_SpriteSetPos(&resetSprite->spr, SCREEN_WIDTH/2, SCREEN_HEIGHT/5);
+
+	resetSprite = &resetSprites[2];
+	C2D_SpriteFromSheet(&resetSprite->spr, resetSheet, 2);
+	C2D_SpriteSetCenter(&resetSprite->spr, 0.5f, 0.5f);
+	C2D_SpriteSetPos(&resetSprite->spr, SCREEN_WIDTH/2, SCREEN_HEIGHT/5);
+
+	resetSprite = &resetSprites[3];
+	C2D_SpriteFromSheet(&resetSprite->spr, resetSheet, 3);
+	C2D_SpriteSetCenter(&resetSprite->spr, 0.5f, 0.5f);
+	C2D_SpriteSetPos(&resetSprite->spr, SCREEN_WIDTH/3, (SCREEN_HEIGHT/5)*2);
+
+	resetSprite = &resetSprites[4];
+	C2D_SpriteFromSheet(&resetSprite->spr, resetSheet, 4);
+	C2D_SpriteSetCenter(&resetSprite->spr, 0.5f, 0.5f);
+	C2D_SpriteSetPos(&resetSprite->spr, (SCREEN_WIDTH/3)*2, (SCREEN_HEIGHT/5)*2);
+
+	resetSprite = &resetSprites[5];
+	C2D_SpriteFromSheet(&resetSprite->spr, resetSheet, 5);
+	C2D_SpriteSetCenter(&resetSprite->spr, 0.5f, 0.5f);
+	C2D_SpriteSetPos(&resetSprite->spr, SCREEN_WIDTH/2, (((SCREEN_HEIGHT/5)*2) + SCREEN_HEIGHT/15));
 
 	int timePassed; 
 	int timesHappened = 0;
@@ -410,6 +449,8 @@ int main(int argc, char**)
 			//Draws the arrow on grid 1,1
 			T3_DRAWARROW(arrowPosX,arrowPosY);
 
+			if (hasWon()!=0) T3_DrawReset(hasWon(), gameTie());
+
 			/* if (touch.px != 0 && touch.py != 0) T3_DrawSprite(spriteNbrIndex); // Draws eiher an X or an O */
 			//------------ END DRAWING --------------
 			C3D_FrameEnd(0);
@@ -493,8 +534,8 @@ int hasWon(){
 	}
 
 	//Diagonal
-	if (gridCoor[0][0] == 1 && gridCoor[1][1] == 1 && gridCoor[2][2] == 1){return 1;}
-	if (gridCoor[2][0] == 1 && gridCoor[1][1] == 1 && gridCoor[0][2] == 1){return 1;}
+	if (gridCoor[0][0] == gridCoor[1][1] && gridCoor[1][1] == gridCoor[2][2]){return gridCoor[0][0];}
+	if (gridCoor[2][0] == gridCoor[1][1] && gridCoor[1][1] == gridCoor[0][2]){return gridCoor[2][0];}
 	
 	return 0;
 }
@@ -516,4 +557,20 @@ bool gameTie() {
 	}
 	
 	return false;
+}
+
+
+static void T3_DrawReset(int win, bool tie) {
+	
+		int winner = win-1;
+		if (!tie){
+			C2D_DrawSprite(&resetSprites[winner].spr);
+		} else {
+			C2D_DrawSprite(&resetSprites[2].spr);
+		}
+		
+		C2D_DrawSprite(&resetSprites[3].spr);
+		C2D_DrawSprite(&resetSprites[4].spr);
+		C2D_DrawSprite(&resetSprites[5].spr);
+	
 }
