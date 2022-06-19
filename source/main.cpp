@@ -480,21 +480,45 @@ bool checkRange(int value, int lowest, int highest) {
 }
 
 int hasWon(){
+		
+	// 	Turn is 1 for player 1, so 1 * 1 * 1 = 1
+	int player1_wins = 1;
+
+	// 	Turn is 2 for player 2, so 2 * 2 * 2 = 8
+	int player2_wins = 8;
+
+	//	Holds the line's points sum
+	int sum = 0;
+	
 	//	Horizontal
 	for (int i = 0; i < 3; i++)
 	{
-		if (1 == gridCoor[i][i] && 1 == gridCoor[i][i+1] && 1 == gridCoor[i][i+2]){return gridCoor[i][i];}
+		sum = gridCoor[0][i] * gridCoor[1][i] * gridCoor[2][i];
+
+		if (sum == player1_wins || sum == player2_wins )
+			return gridCoor[0][i];
 	}
 
 	// Vertical
 	for (int i = 0; i < 3; i++)
 	{
-		if (1 == gridCoor[i][i] && 1 == gridCoor[i+1][i] && 1 == gridCoor[i+2][i]){return gridCoor[i][i];}
+		sum = gridCoor[i][0] * gridCoor[i][1] * gridCoor[i][2];
+		
+		if (sum == player1_wins || sum == player2_wins)
+			return gridCoor[i][0];
+		
 	}
 
 	//Diagonal
-	if (gridCoor[0][0] == 1 && gridCoor[1][1] == 1 && gridCoor[2][2] == 1){return 1;}
-	if (gridCoor[2][0] == 1 && gridCoor[1][1] == 1 && gridCoor[0][2] == 1){return 1;}
+	sum = gridCoor[0][0] * gridCoor[1][1] * gridCoor[2][2];
+	if (sum == player1_wins || sum == player2_wins)
+		return gridCoor[0][0];
+	
+
+	sum = gridCoor[2][0] * gridCoor[1][1] * gridCoor[0][2];
+	if (sum == player1_wins || sum == player2_wins)
+		return gridCoor[2][0];
+	
 	
 	return 0;
 }
